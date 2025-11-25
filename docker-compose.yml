@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    command: npm run dev
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - JWT_SECRET=change-me
+      - BOT_TOKEN=${BOT_TOKEN}
+      - PORT=4000
+    volumes:
+      - ./backend:/app
+      - sqlite_data:/app/prisma
+    ports:
+      - "4000:4000"
+    working_dir: /app
+
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./passport/dist:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  sqlite_data:

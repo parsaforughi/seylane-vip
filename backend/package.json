@@ -1,0 +1,28 @@
+{
+  "name": "seylane-vip-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "node --loader ts-node/esm src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.22",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.9.4",
+    "prisma": "^6.2.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.5.6"
+  }
+}
