@@ -20,7 +20,7 @@ function Login({ telegramInitData = "" }) {
 
   useEffect(() => {
     const windowInitData = window.Telegram?.WebApp?.initData;
-    const initData = token ? "" : telegramInitData || windowInitData || "";
+    const initData = telegramInitData || windowInitData || "";
     console.log("Telegram initData", initData);
     if (!initData || autoLoginAttempted.current) return;
     autoLoginAttempted.current = true;

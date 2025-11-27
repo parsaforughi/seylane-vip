@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { api } from "../api/client";
 import { useAuthStore } from "../store/useAuthStore";
 import ProgressCircle from "../components/ProgressCircle";
 import GlassCard from "../components/GlassCard";
 import PageContainer from "../components/PageContainer";
+import { loadUserAndDashboard } from "../api/loaders";
 
 function Stamps() {
   const { setUser } = useAuthStore();
@@ -13,26 +13,27 @@ function Stamps() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
     const load = async () => {
       setLoading(true);
       try {
-        const [userRes, dashRes] = await Promise.all([
-          api.get("/user/me"),
-          api.get("/dashboard"),
-        ]);
-        setLocalUser(userRes.data);
-        setUser(userRes.data);
-        setDashboard(dashRes.data);
+        const { user: u, dashboard: d } = await loadUserAndDashboard(setUser);
+        if (!mounted) return;
+        setLocalUser(u);
+        setDashboard(d);
         setError(null);
       } catch (err) {
         console.error(err);
-        setError("خطا در دریافت اطلاعات تمبرها.");
+        if (mounted) setError("خطا در دریافت اطلاعات تمبرها.");
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
     load();
+    return () => {
+      mounted = false;
+    };
   }, [setUser]);
 
   if (loading) {
