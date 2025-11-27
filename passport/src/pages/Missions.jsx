@@ -38,10 +38,6 @@ function Missions() {
     };
   }, [setUser]);
 
-  if (loading) {
-    return <p>در حال دریافت مأموریت‌ها...</p>;
-  }
-
   const safeMissions = missions || [];
 
   const actionButton = (type) => {
@@ -53,6 +49,9 @@ function Missions() {
 
   return (
     <PageContainer>
+      {loading && <p>در حال دریافت مأموریت‌ها...</p>}
+      {error && <p className="error">{error}</p>}
+      {!loading && !safeMissions.length && <p>مأموریتی ثبت نشده است.</p>}
       <div className="missions-list">
         {safeMissions.map((mission, idx) => {
           const go = actionButton(mission.type);
