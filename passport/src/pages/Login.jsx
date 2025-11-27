@@ -22,7 +22,6 @@ function Login({ telegramInitData = "" }) {
     const windowInitData = window.Telegram?.WebApp?.initData;
     const initData = token ? "" : telegramInitData || windowInitData || "";
     console.log("Telegram initData", initData);
-    const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
     if (!initData || autoLoginAttempted.current) return;
     autoLoginAttempted.current = true;
     setAutoLoading(true);

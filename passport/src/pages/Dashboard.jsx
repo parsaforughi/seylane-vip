@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../api/client";
 import { useAuthStore } from "../store/useAuthStore";
 import GlassCard from "../components/GlassCard";
 import NeonButton from "../components/NeonButton";
 import PageContainer from "../components/PageContainer";
 import ProgressCircle from "../components/ProgressCircle";
+import { loadUserAndDashboard } from "../api/loaders";
 
 function Dashboard() {
   const { setUser } = useAuthStore();
@@ -16,26 +16,26 @@ function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let mounted = true;
     const load = async () => {
       setLoading(true);
       try {
-        const [userRes, dashRes] = await Promise.all([
-          api.get("/user/me"),
-          api.get("/dashboard"),
-        ]);
-        setLocalUser(userRes.data);
-        setUser(userRes.data);
-        setDashboard(dashRes.data);
+        const { user: u, dashboard: d } = await loadUserAndDashboard(setUser);
+        if (!mounted) return;
+        setLocalUser(u);
+        setDashboard(d);
         setError(null);
       } catch (err) {
         console.error(err);
-        setError("خطا در دریافت اطلاعات از سرور.");
+        if (mounted) setError("خطا در دریافت اطلاعات از سرور.");
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
-
     load();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (loading) {

@@ -1,9 +1,9 @@
 import axios from "axios";
 
 export const API_BASE =
-  import.meta.env?.DEV && typeof window !== "undefined"
-    ? "http://localhost:10000/api"
-    : "https://seylane-vip.onrender.com/api";
+  typeof window !== "undefined" && window.location.host.includes("onrender.com")
+    ? "https://seylane-vip.onrender.com/api"
+    : "http://localhost:10000/api";
 
 const api = axios.create({
   baseURL: API_BASE,

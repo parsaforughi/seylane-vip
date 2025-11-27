@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import GlassCard from "../components/GlassCard";
 import PageContainer from "../components/PageContainer";
 import NeonButton from "../components/NeonButton";
+import { loadUserAndDashboard } from "../api/loaders";
 
 const logo = "/seylane_logo.png";
 
@@ -15,25 +16,29 @@ function Profile() {
   const [qrUrl, setQrUrl] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
     const load = async () => {
       setLoading(true);
       try {
-        const response = await api.get("/user/me");
-        setLocalUser(response.data);
-        setUser(response.data);
+        const { user: u } = await loadUserAndDashboard(setUser);
+        if (!mounted) return;
+        setLocalUser(u);
         setError(null);
-        const blob = await fetchQrImage(response.data.id);
+        const blob = await fetchQrImage(u.id);
         const url = URL.createObjectURL(blob);
         setQrUrl(url);
       } catch (err) {
         console.error(err);
-        setError("خطا در دریافت اطلاعات کاربر.");
+        if (mounted) setError("خطا در دریافت اطلاعات کاربر.");
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
     load();
+    return () => {
+      mounted = false;
+    };
   }, [setUser]);
 
   if (loading) {
