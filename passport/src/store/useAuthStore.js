@@ -12,6 +12,8 @@ const initialUser =
     ? JSON.parse(localStorage.getItem(userKey))
     : null;
 
+console.log("Auth hydrated", initialToken, initialUser);
+
 export const useAuthStore = create((set) => ({
   user: initialUser,
   token: initialToken,

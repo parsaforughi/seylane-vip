@@ -5,10 +5,12 @@ import "./styles.css";
 
 const initTelegramWebApp = () => {
   const webApp = window.Telegram?.WebApp;
-  if (!webApp) return;
+  if (!webApp) return { initData: "" };
 
   webApp.ready();
   webApp.expand();
+
+  const initData = webApp.initData || "";
 
   const { themeParams = {} } = webApp;
   if (themeParams.bg_color) {
@@ -18,12 +20,13 @@ const initTelegramWebApp = () => {
   if (themeParams.text_color) {
     document.body.style.color = themeParams.text_color;
   }
+  return { initData };
 };
 
-initTelegramWebApp();
+const tgInfo = initTelegramWebApp();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <App telegramInitData={tgInfo?.initData || ""} />
   </React.StrictMode>
 );

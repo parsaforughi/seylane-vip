@@ -35,8 +35,8 @@ export async function demoLoginRequest() {
   return response.data;
 }
 
-export async function telegramLoginRequest(initData) {
-  const response = await api.post("/auth/telegram", { initData });
+export async function telegramLogin(initData) {
+  const response = await api.post("/auth/telegram-login", { initData });
   return response.data;
 }
 

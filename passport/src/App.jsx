@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "./store/useAuthStore";
-import { fetchMe, telegramLoginRequest } from "./api/client";
+import { fetchMe } from "./api/client";
 import MainLayout from "./layouts/MainLayout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -11,7 +11,6 @@ import Profile from "./pages/Profile";
 import Purchase from "./pages/Purchase";
 import Display from "./pages/Display";
 import Referral from "./pages/Referral";
-import CompleteProfile from "./pages/CompleteProfile";
 import AdminPanel from "./pages/AdminPanel";
 
 function RequireAuth() {
@@ -23,26 +22,12 @@ function RequireAuth() {
   return <Outlet />;
 }
 
-function App() {
+function App({ telegramInitData = "" }) {
   const { token, setAuth, clearAuth, user } = useAuthStore();
   const [bootstrapped, setBootstrapped] = useState(false);
 
   useEffect(() => {
-    const maybeTelegramLogin = async () => {
-      if (token) return;
-      const initData = window.Telegram?.WebApp?.initData;
-      if (!initData) return;
-      try {
-        const { token: t, user: u } = await telegramLoginRequest(initData);
-        localStorage.setItem("vip_passport_token", t);
-        setAuth(t, u);
-      } catch (err) {
-        console.error("Telegram auto login failed", err);
-      }
-    };
-
     const init = async () => {
-      await maybeTelegramLogin();
       if (!token) {
         setBootstrapped(true);
         return;
@@ -63,14 +48,11 @@ function App() {
     return <div className="app-shell"><p>در حال بارگذاری...</p></div>;
   }
 
-  const needsProfileCompletion = false;
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login telegramInitData={telegramInitData} />} />
         <Route element={<RequireAuth />}>
-          {/* <Route path="/complete-profile" element={<CompleteProfile />} /> */}
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/missions" element={<Missions />} />

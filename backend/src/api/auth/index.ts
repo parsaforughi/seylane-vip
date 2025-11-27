@@ -6,7 +6,7 @@ const router = Router();
 
 router.post("/telegram", async (req, res, next) => {
   try {
-    const botToken = process.env.BOT_TOKEN;
+    const botToken = process.env.BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
     const { initData, ...rest } = req.body || {};
     if (initData && botToken) {
       const parsed = parseInitData(initData);
@@ -47,58 +47,6 @@ router.post("/telegram", async (req, res, next) => {
   }
 });
 
-router.post("/telegram-login", async (req, res) => {
-  try {
-    const botToken = process.env.BOT_TOKEN;
-    if (!botToken) {
-      return res.status(500).json({ error: "Bot token not configured" });
-    }
-    const { initData, ...legacy } = req.body || {};
-
-    if (initData) {
-      const parsed = parseInitData(initData);
-      const userRaw = parsed.user ? JSON.parse(parsed.user) : null;
-      const authData = {
-        ...parsed,
-        user: undefined,
-        id: userRaw?.id,
-        first_name: userRaw?.first_name,
-        last_name: userRaw?.last_name,
-        username: userRaw?.username,
-        hash: parsed.hash,
-      };
-      if (!verifyTelegramAuth(authData, botToken)) {
-        return res.status(401).json({ error: "Invalid Telegram auth hash" });
-      }
-
-      const result = await upsertUserFromTelegram({
-        telegramId: userRaw?.id,
-        firstName: userRaw?.first_name,
-        lastName: userRaw?.last_name,
-        username: userRaw?.username,
-        phone: undefined,
-      });
-      return res.json(result);
-    } else {
-      const { hash, ...rest } = legacy;
-      if (!verifyTelegramAuth({ hash, ...rest }, botToken)) {
-        return res.status(401).json({ error: "Invalid Telegram auth hash" });
-      }
-
-      const result = await upsertUserFromTelegram({
-        telegramId: rest.id,
-        firstName: rest.first_name,
-        lastName: rest.last_name,
-        username: rest.username,
-        phone: undefined,
-      });
-      return res.json(result);
-    }
-  } catch (err: any) {
-    return res.status(400).json({ error: err.message });
-  }
-});
-
 router.post("/demo-login", async (_req, res, next) => {
   try {
     const result = await upsertUserFromTelegram({
@@ -110,6 +58,48 @@ router.post("/demo-login", async (_req, res, next) => {
     res.json(result);
   } catch (err) {
     next(err);
+  }
+});
+
+router.post("/telegram-login", async (req, res) => {
+  try {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN || process.env.BOT_TOKEN;
+    if (!botToken) {
+      return res.status(500).json({ error: "Bot token not configured" });
+    }
+    const { initData } = req.body || {};
+    if (!initData) {
+      return res.status(400).json({ error: "initData required" });
+    }
+
+    const parsed = parseInitData(initData);
+    const userRaw = parsed.user ? JSON.parse(parsed.user) : null;
+    const authData = Object.keys(parsed).reduce<Record<string, any>>((acc, key) => {
+      if (key !== "hash") acc[key] = parsed[key];
+      return acc;
+    }, {});
+    if (userRaw) {
+      authData.id = userRaw.id;
+      authData.first_name = userRaw.first_name;
+      authData.last_name = userRaw.last_name;
+      authData.username = userRaw.username;
+    }
+    authData.hash = parsed.hash;
+
+    if (!verifyTelegramAuth(authData, botToken)) {
+      return res.status(401).json({ error: "invalid_telegram_signature" });
+    }
+
+    const result = await upsertUserFromTelegram({
+      telegramId: userRaw?.id,
+      firstName: userRaw?.first_name,
+      lastName: userRaw?.last_name,
+      username: userRaw?.username,
+      phone: undefined,
+    });
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
   }
 });
 
