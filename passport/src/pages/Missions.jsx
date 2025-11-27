@@ -1,6 +1,35 @@
-function Missions({ missions, loading }) {
+import { useEffect, useState } from "react";
+import { api } from "../api/client";
+
+function Missions() {
+  const [missions, setMissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get("/missions");
+        setMissions(response.data || []);
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("خطا در دریافت مأموریت‌ها.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
+
   if (loading) {
     return <p>در حال دریافت مأموریت‌ها...</p>;
+  }
+
+  if (error) {
+    return <p className="error">{error}</p>;
   }
 
   if (!missions.length) {

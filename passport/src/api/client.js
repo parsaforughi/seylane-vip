@@ -1,7 +1,9 @@
 import axios from "axios";
 
+export const API_BASE = "https://seylane-vip.onrender.com/api";
+
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: API_BASE,
 });
 
 api.interceptors.request.use((config) => {
@@ -27,6 +29,11 @@ export async function devLoginRequest() {
 
 export async function demoLoginRequest() {
   const response = await api.post("/auth/demo-login");
+  return response.data;
+}
+
+export async function telegramLoginRequest(userPayload) {
+  const response = await api.post("/auth/telegram", userPayload);
   return response.data;
 }
 

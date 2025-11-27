@@ -1,18 +1,57 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { demoLoginRequest, devLoginRequest } from "../api/client";
+import { demoLoginRequest, devLoginRequest, telegramLoginRequest } from "../api/client";
 
 function Login() {
+  const navigate = useNavigate();
+  const { setAuth, token } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [testLoading, setTestLoading] = useState(false);
   const [testError, setTestError] = useState(null);
+  const [autoLoading, setAutoLoading] = useState(false);
+  const autoLoginAttempted = useRef(false);
 
   const saveAuth = ({ token, user }) => {
     localStorage.setItem("vip_passport_token", token);
-    useAuthStore.setState({ token, user });
-    window.location.href = "/dashboard";
+    setAuth({ token, user });
+    navigate("/dashboard", { replace: true });
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [token, navigate]);
+
+  useEffect(() => {
+    const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if (!telegramUser || autoLoginAttempted.current) {
+      return;
+    }
+
+    autoLoginAttempted.current = true;
+    setAutoLoading(true);
+    const attemptLogin = async () => {
+      try {
+        const result = await telegramLoginRequest({
+          telegramId: telegramUser.id,
+          firstName: telegramUser.first_name,
+          lastName: telegramUser.last_name,
+          username: telegramUser.username,
+        });
+        saveAuth(result);
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "ورود از طریق تلگرام ناموفق بود.");
+      } finally {
+        setAutoLoading(false);
+      }
+    };
+
+    attemptLogin();
+  }, [navigate]);
 
   const handleLogin = async () => {
     setError(null);
@@ -52,18 +91,19 @@ function Login() {
           <div className="passport-right">
             <h2>ورود با تلگرام</h2>
             <p>برای دسترسی به پاسپورت دیجیتال، با حساب تلگرام خود وارد شوید.</p>
-            <button className="login-btn" onClick={handleLogin} disabled={loading}>
-              {loading ? "در حال ورود..." : "ورود با تلگرام"}
+            <button className="login-btn" onClick={handleLogin} disabled={loading || autoLoading}>
+              {loading || autoLoading ? "در حال ورود..." : "ورود با تلگرام"}
             </button>
             <button
               className="login-btn"
               style={{ background: "transparent", border: "1px solid #facc15", color: "#facc15" }}
               onClick={handleDemoLogin}
-              disabled={testLoading}
+              disabled={testLoading || autoLoading}
             >
-              {testLoading ? "در حال ورود..." : "ورود تست (بدون تلگرام)"}
+              {testLoading || autoLoading ? "در حال ورود..." : "ورود تست (بدون تلگرام)"}
             </button>
             <small>با ورود، شرایط باشگاه وفاداری را می‌پذیرید.</small>
+            {autoLoading && <p>در حال بررسی ورود تلگرام...</p>}
             {error && <p className="error">{error}</p>}
             {testError && <p className="error">{testError}</p>}
           </div>
