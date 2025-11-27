@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { submitReferralRequest } from "../api/client";
+import { api } from "../api/client";
 import GlassCard from "../components/GlassCard";
 import NeonButton from "../components/NeonButton";
 import PageContainer from "../components/PageContainer";
@@ -29,7 +29,7 @@ function Referral() {
     setLoading(true);
     setError(null);
     try {
-      await submitReferralRequest(form);
+      await api.post("/referral", form);
       setMessage("معرفی ثبت شد و در انتظار بررسی است.");
     } catch (err) {
       setError(err.message || "ثبت معرفی ناموفق بود.");

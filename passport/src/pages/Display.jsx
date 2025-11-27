@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { submitDisplayRequest, uploadFile } from "../api/client";
+import { uploadFile, api } from "../api/client";
 import GlassCard from "../components/GlassCard";
 import NeonButton from "../components/NeonButton";
 import PageContainer from "../components/PageContainer";
@@ -46,7 +46,7 @@ function Display() {
     setLoading(true);
     setError(null);
     try {
-      await submitDisplayRequest(form);
+      await api.post("/display", form);
       setMessage("چیدمان ثبت شد و در انتظار تایید است.");
       setTimeout(() => navigate("/missions"), 800);
     } catch (err) {

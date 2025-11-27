@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { submitPurchaseRequest, uploadFile } from "../api/client";
+import { uploadFile, api } from "../api/client";
 import { useNavigate } from "react-router-dom";
 import GlassCard from "../components/GlassCard";
 import NeonButton from "../components/NeonButton";
@@ -23,41 +23,38 @@ function Purchase() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleFile = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    setError(null);
-    try {
-      const res = await uploadFile(file);
-      setForm((prev) => ({ ...prev, imageUrl: res.url }));
-    } catch (err) {
-      setError(err.message || "آپلود فایل ناموفق بود.");
-    } finally {
-      setUploading(false);
-    }
+  const [file, setFile] = useState(null);
+
+  const handleFile = (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setFile(f);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.imageUrl || !form.amount) {
-      setError("تصویر فاکتور و مبلغ الزامی است.");
-      return;
-    }
     setLoading(true);
     setError(null);
     try {
-      await submitPurchaseRequest({
-        imageUrl: form.imageUrl,
-        amount: Number(form.amount),
+      let imageUrl = "";
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const uploadRes = await uploadFile(formData);
+        imageUrl = uploadRes.url;
+      }
+
+      await api.post("/purchase", {
+        amount: form.amount,
         date: form.date,
-        brands: form.brands,
-        notes: form.notes,
+        description: form.notes,
+        imageUrl,
       });
-      setMessage("خرید ثبت شد و در انتظار تایید است.");
-      setTimeout(() => navigate("/missions"), 800);
+
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.message || "ثبت خرید ناموفق بود.");
+      console.error(err);
+      setError("خطا در ثبت خرید");
     } finally {
       setLoading(false);
     }
@@ -74,7 +71,7 @@ function Purchase() {
             <div className="file-preview">
               {uploading
                 ? "در حال آپلود..."
-                : form.imageUrl
+                : file
                 ? "تصویر انتخاب شد"
                 : "فایل خود را انتخاب کنید"}
             </div>

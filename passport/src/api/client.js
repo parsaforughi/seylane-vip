@@ -55,17 +55,25 @@ export async function fetchMissions() {
   return response.data;
 }
 
-export async function uploadFile(file) {
-  const form = new FormData();
-  form.append("file", file);
-  const response = await api.post("/upload", form, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return response.data;
-}
+export const uploadFile = async (formData) =>
+  api
+    .post("/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((r) => r.data);
 
 export async function fetchQrImage(userId) {
   const response = await api.get(`/qr/${userId}`, { responseType: "blob" });
+  return response.data;
+}
+
+export async function adminFetch(path) {
+  const response = await api.get(`/admin/${path}`);
+  return response.data;
+}
+
+export async function adminPost(path, data) {
+  const response = await api.post(`/admin/${path}`, data);
   return response.data;
 }
 
