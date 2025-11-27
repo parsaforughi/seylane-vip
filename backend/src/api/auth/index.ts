@@ -6,7 +6,34 @@ const router = Router();
 
 router.post("/telegram", async (req, res, next) => {
   try {
-    const data = req.body;
+    const botToken = process.env.BOT_TOKEN;
+    const { initData, ...rest } = req.body || {};
+    if (initData && botToken) {
+      const parsed = parseInitData(initData);
+      const userRaw = parsed.user ? JSON.parse(parsed.user) : null;
+      const authData = {
+        ...parsed,
+        user: undefined,
+        id: userRaw?.id,
+        first_name: userRaw?.first_name,
+        last_name: userRaw?.last_name,
+        username: userRaw?.username,
+        hash: parsed.hash,
+      };
+      if (!verifyTelegramAuth(authData, botToken)) {
+        return res.status(401).json({ error: "Invalid Telegram auth hash" });
+      }
+      const result = await upsertUserFromTelegram({
+        telegramId: userRaw?.id,
+        firstName: userRaw?.first_name,
+        lastName: userRaw?.last_name,
+        username: userRaw?.username,
+        phone: undefined,
+      });
+      return res.json(result);
+    }
+
+    const data = rest;
     const result = await upsertUserFromTelegram(data as {
       telegramId: number | string;
       firstName?: string;

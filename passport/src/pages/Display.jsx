@@ -1,19 +1,37 @@
 import { useState } from "react";
-import { submitDisplayRequest } from "../api/client";
+import { useNavigate } from "react-router-dom";
+import { submitDisplayRequest, uploadFile } from "../api/client";
 
 function Display() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     imageUrl: "",
     brand: "",
     location: "",
     notes: "",
   });
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const res = await uploadFile(file);
+      setForm((prev) => ({ ...prev, imageUrl: res.url }));
+    } catch (err) {
+      setError(err.message || "آپلود ناموفق بود.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -27,6 +45,7 @@ function Display() {
     try {
       await submitDisplayRequest(form);
       setMessage("چیدمان ثبت شد و در انتظار تایید است.");
+      setTimeout(() => navigate("/missions"), 800);
     } catch (err) {
       setError(err.message || "ثبت چیدمان ناموفق بود.");
     } finally {
@@ -39,14 +58,10 @@ function Display() {
       <h2>ثبت چیدمان</h2>
       <form onSubmit={handleSubmit} className="form-grid">
         <label>
-          لینک تصویر
-          <input
-            name="imageUrl"
-            value={form.imageUrl}
-            onChange={handleChange}
-            placeholder="URL"
-            required
-          />
+          تصویر
+          <input type="file" accept="image/*" onChange={handleFile} />
+          {uploading && <p className="muted">در حال آپلود...</p>}
+          {form.imageUrl && <p className="muted">آپلود شد</p>}
         </label>
         <label>
           برند

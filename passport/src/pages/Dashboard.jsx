@@ -16,7 +16,7 @@ function Dashboard() {
       setLoading(true);
       try {
         const [userRes, dashRes] = await Promise.all([
-          api.get("/user"),
+          api.get("/user/me"),
           api.get("/dashboard"),
         ]);
         setLocalUser(userRes.data);
@@ -56,8 +56,8 @@ function Dashboard() {
 
   return (
     <div className="card">
-      <h2>سلام {user.firstName || "همراه"} عزیز</h2>
-      <p>به پاسپورت ویژه سیلانه خوش آمدی.</p>
+      <h2>سلام {user.storeName || user.firstName || "همراه"} عزیز</h2>
+      <p className="muted">به پاسپورت ویژه سیلانه خوش آمدی.</p>
       <div className="quick-actions">
         <button className="login-btn" onClick={() => navigate("/purchase")}>
           ثبت خرید
@@ -72,11 +72,11 @@ function Dashboard() {
       <div className="data-grid">
         <div>
           <p className="label">امتیاز</p>
-          <p className="value">{user.points ?? 0}</p>
+          <p className="value">{dashboard.points ?? user.points ?? 0}</p>
         </div>
         <div>
           <p className="label">تمبرها</p>
-          <p className="value">{user.stamps ?? 0}</p>
+          <p className="value">{dashboard.stamps ?? user.stamps ?? 0}</p>
         </div>
         <div>
           <p className="label">مأموریت‌های فعال</p>
@@ -84,7 +84,7 @@ function Dashboard() {
         </div>
         <div>
           <p className="label">در انتظار تأیید</p>
-          <p className="value">{dashboard.pendingMissionLogsCount ?? 0}</p>
+          <p className="value">{dashboard.pendingApprovalsCount ?? 0}</p>
         </div>
       </div>
     </div>

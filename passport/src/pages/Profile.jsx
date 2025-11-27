@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import logo from "../assets/logo.png";
 import { api, fetchQrImage } from "../api/client";
 import { useAuthStore } from "../store/useAuthStore";
 
 function Profile() {
-  const { logout, user: storedUser, setUser } = useAuthStore();
+  const { clearAuth, user: storedUser, setUser } = useAuthStore();
   const [user, setLocalUser] = useState(storedUser);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,11 +14,11 @@ function Profile() {
     const load = async () => {
       setLoading(true);
       try {
-        const response = await api.get("/user");
+        const response = await api.get("/user/me");
         setLocalUser(response.data);
         setUser(response.data);
         setError(null);
-        const blob = await fetchQrImage();
+        const blob = await fetchQrImage(response.data.id);
         const url = URL.createObjectURL(blob);
         setQrUrl(url);
       } catch (err) {
@@ -45,15 +46,25 @@ function Profile() {
 
   return (
     <div className="card">
-      <h2>پروفایل</h2>
-      <div className="data-grid">
+      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+        <img src={logo} alt="logo" className="brand-logo" />
         <div>
-          <p className="label">نام</p>
-          <p className="value">{user.firstName || "نامشخص"}</p>
+          <h2 style={{ margin: 0 }}>پروفایل</h2>
+          <p className="muted">{user.storeName || "فروشگاه شما"}</p>
+        </div>
+      </div>
+      <div className="data-grid" style={{ marginTop: 12 }}>
+        <div>
+          <p className="label">نام مدیر</p>
+          <p className="value">{user.managerName || user.firstName || "نامشخص"}</p>
         </div>
         <div>
-          <p className="label">نام خانوادگی</p>
-          <p className="value">{user.lastName || "نامشخص"}</p>
+          <p className="label">تلفن</p>
+          <p className="value">{user.phone || "نامشخص"}</p>
+        </div>
+        <div>
+          <p className="label">شهر</p>
+          <p className="value">{user.city || "نامشخص"}</p>
         </div>
         <div>
           <p className="label">نام کاربری تلگرام</p>
@@ -61,16 +72,22 @@ function Profile() {
         </div>
         <div>
           <p className="label">وضعیت VIP</p>
-      <p className="value">{user.vipSince ? "فعال" : "غیرفعال"}</p>
+          <p className="value">{user.vipSince ? "فعال" : "غیرفعال"}</p>
         </div>
       </div>
       {qrUrl && (
         <div style={{ marginTop: 16, textAlign: "center" }}>
           <p className="label">QR ورود سریع</p>
-          <img src={qrUrl} alt="QR" style={{ width: 160, height: 160 }} />
+          <img src={qrUrl} alt="QR" style={{ width: 160, height: 160, borderRadius: 12 }} />
         </div>
       )}
-      <button className="logout-btn" onClick={logout}>
+      <button
+        className="logout-btn"
+        onClick={() => {
+          clearAuth();
+          window.location.href = "/login";
+        }}
+      >
         خروج از حساب
       </button>
     </div>

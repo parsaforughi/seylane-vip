@@ -1,6 +1,7 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
+import path from "path";
 import apiRouter from "./api/index";
 import prisma from "./utils/prisma";
 
@@ -14,6 +15,13 @@ prisma.$connect().catch((error) => {
 
 app.use(cors());
 app.use(express.json());
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../uploads"), {
+    maxAge: "1d",
+    index: false,
+  })
+);
 app.use("/api", apiRouter);
 
 app.get("/health", async (_req, res) => {

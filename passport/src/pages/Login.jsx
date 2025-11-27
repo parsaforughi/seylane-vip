@@ -1,81 +1,55 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 import { useAuthStore } from "../store/useAuthStore";
-import { demoLoginRequest, devLoginRequest, telegramLoginRequest } from "../api/client";
+import { demoLoginRequest, telegramLoginRequest } from "../api/client";
 
 function Login() {
   const navigate = useNavigate();
-  const { setAuth, token, needsProfileCompletion } = useAuthStore();
+  const { setAuth, token } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [testLoading, setTestLoading] = useState(false);
-  const [testError, setTestError] = useState(null);
   const [autoLoading, setAutoLoading] = useState(false);
   const autoLoginAttempted = useRef(false);
 
-  const saveAuth = ({ token, user, needsProfileCompletion }) => {
-    localStorage.setItem("vip_passport_token", token);
-    setAuth({ token, user, needsProfileCompletion });
-    if (needsProfileCompletion) {
-      navigate("/complete-profile", { replace: true });
-    } else {
-      navigate("/dashboard", { replace: true });
-    }
-  };
-
   useEffect(() => {
     if (token) {
-      navigate(needsProfileCompletion ? "/complete-profile" : "/dashboard", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
-  }, [token, needsProfileCompletion, navigate]);
+  }, [token, navigate]);
 
   useEffect(() => {
     const initData = window.Telegram?.WebApp?.initData;
     const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    if (!telegramUser || !initData || autoLoginAttempted.current) {
-      return;
-    }
-
+    if (!telegramUser || !initData || autoLoginAttempted.current) return;
     autoLoginAttempted.current = true;
     setAutoLoading(true);
-    const attemptLogin = async () => {
-      try {
-        const result = await telegramLoginRequest(initData);
-        saveAuth(result);
-      } catch (err) {
+    telegramLoginRequest(initData)
+      .then(({ token: t, user }) => {
+        localStorage.setItem("vip_passport_token", t);
+        setAuth(t, user);
+        const incomplete = !user.storeName || !user.managerName || !user.city || !user.phone;
+        navigate(incomplete ? "/complete-profile" : "/dashboard", { replace: true });
+      })
+      .catch((err) => {
         console.error(err);
         setError(err.message || "ورود از طریق تلگرام ناموفق بود.");
-      } finally {
-        setAutoLoading(false);
-      }
-    };
-
-    attemptLogin();
-  }, [navigate]);
+      })
+      .finally(() => setAutoLoading(false));
+  }, [navigate, setAuth]);
 
   const handleLogin = async () => {
     setError(null);
     setLoading(true);
     try {
-      const result = await devLoginRequest();
-      saveAuth(result);
+      const result = await demoLoginRequest();
+      localStorage.setItem("vip_passport_token", result.token);
+      setAuth(result.token, result.user);
+      navigate("/dashboard", { replace: true });
     } catch (err) {
-      setError(err.message || "ورود با خطا مواجه شد.");
+      setError(err.message || "ورود تست ناموفق بود.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDemoLogin = async () => {
-    setTestError(null);
-    setTestLoading(true);
-    try {
-      const result = await demoLoginRequest();
-      saveAuth(result);
-    } catch (err) {
-      setTestError(err.message || "ورود تست ناموفق بود.");
-    } finally {
-      setTestLoading(false);
     }
   };
 
@@ -84,28 +58,19 @@ function Login() {
       <div className="passport-page passport-login">
         <div className="passport-book">
           <div className="passport-left">
-            <div className="logo-circle">S</div>
-            <h1>پاسپورت ویژه سیلانه</h1>
-            <p>ورود مخصوص اعضای باشگاه وفاداری</p>
+            <img src={logo} alt="Seylaneh" className="header-logo" />
+            <h1 style={{ margin: 0 }}>پاسپورت ویژه سیلانه</h1>
+            <p className="muted">ورود مخصوص اعضای باشگاه وفاداری</p>
           </div>
           <div className="passport-right">
-            <h2>ورود با تلگرام</h2>
-            <p>برای دسترسی به پاسپورت دیجیتال، با حساب تلگرام خود وارد شوید.</p>
+            <h2>ورود</h2>
+            <p className="muted">اگر تلگرام فعال باشد، ورود خودکار انجام می‌شود.</p>
             <button className="login-btn" onClick={handleLogin} disabled={loading || autoLoading}>
-              {loading || autoLoading ? "در حال ورود..." : "ورود با تلگرام"}
-            </button>
-            <button
-              className="login-btn"
-              style={{ background: "transparent", border: "1px solid #facc15", color: "#facc15" }}
-              onClick={handleDemoLogin}
-              disabled={testLoading || autoLoading}
-            >
-              {testLoading || autoLoading ? "در حال ورود..." : "ورود تست (بدون تلگرام)"}
+              {loading || autoLoading ? "در حال ورود..." : "ورود تست (بدون تلگرام)"}
             </button>
             <small>با ورود، شرایط باشگاه وفاداری را می‌پذیرید.</small>
             {autoLoading && <p>در حال بررسی ورود تلگرام...</p>}
             {error && <p className="error">{error}</p>}
-            {testError && <p className="error">{testError}</p>}
           </div>
         </div>
       </div>

@@ -1,10 +1,24 @@
 import prisma from "../utils/prisma";
 
-export async function listActiveMissions() {
-  return prisma.mission.findMany({
+export async function listActiveMissions(userId?: number) {
+  const missions = await prisma.mission.findMany({
     where: { isActive: true },
     orderBy: { id: "asc" },
   });
+
+  if (!userId) return missions;
+
+  const logs = await prisma.missionLog.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+  });
+  const logByMission = new Map<number, typeof logs[number]>();
+  logs.forEach((log) => logByMission.set(log.missionId, log));
+
+  return missions.map((mission) => ({
+    ...mission,
+    userStatus: logByMission.get(mission.id)?.status ?? "ACTIVE",
+  }));
 }
 
 export async function startMission(userId: number, missionId: number) {

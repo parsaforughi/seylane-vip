@@ -1,20 +1,38 @@
 import { useState } from "react";
-import { submitPurchaseRequest } from "../api/client";
+import { submitPurchaseRequest, uploadFile } from "../api/client";
+import { useNavigate } from "react-router-dom";
 
 function Purchase() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     imageUrl: "",
     amount: "",
-    purchaseDate: "",
+    date: "",
     brands: "",
     notes: "",
   });
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const res = await uploadFile(file);
+      setForm((prev) => ({ ...prev, imageUrl: res.url }));
+    } catch (err) {
+      setError(err.message || "آپلود فایل ناموفق بود.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -29,11 +47,12 @@ function Purchase() {
       await submitPurchaseRequest({
         imageUrl: form.imageUrl,
         amount: Number(form.amount),
-        purchaseDate: form.purchaseDate,
+        date: form.date,
         brands: form.brands,
         notes: form.notes,
       });
       setMessage("خرید ثبت شد و در انتظار تایید است.");
+      setTimeout(() => navigate("/missions"), 800);
     } catch (err) {
       setError(err.message || "ثبت خرید ناموفق بود.");
     } finally {
@@ -46,14 +65,10 @@ function Purchase() {
       <h2>ثبت خرید</h2>
       <form onSubmit={handleSubmit} className="form-grid">
         <label>
-          لینک تصویر فاکتور
-          <input
-            name="imageUrl"
-            value={form.imageUrl}
-            onChange={handleChange}
-            placeholder="URL"
-            required
-          />
+          تصویر فاکتور
+          <input type="file" accept="image/*" onChange={handleFile} />
+          {uploading && <p className="muted">در حال آپلود...</p>}
+          {form.imageUrl && <p className="muted">آپلود شد</p>}
         </label>
         <label>
           مبلغ
@@ -68,9 +83,9 @@ function Purchase() {
         <label>
           تاریخ خرید
           <input
-            name="purchaseDate"
+            name="date"
             type="date"
-            value={form.purchaseDate}
+            value={form.date}
             onChange={handleChange}
           />
         </label>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuthStore } from "../store/useAuthStore";
+import ProgressCircle from "../components/ProgressCircle";
 
 function Stamps() {
   const { setUser } = useAuthStore();
@@ -14,7 +15,7 @@ function Stamps() {
       setLoading(true);
       try {
         const [userRes, dashRes] = await Promise.all([
-          api.get("/user"),
+          api.get("/user/me"),
           api.get("/dashboard"),
         ]);
         setLocalUser(userRes.data);
@@ -44,26 +45,22 @@ function Stamps() {
     return <p>اطلاعات در دسترس نیست.</p>;
   }
 
+  const stamps = user?.stamps ?? dashboard?.stamps ?? 0;
+  const nextRewardAt = 10;
+
   return (
     <div className="card">
       <h2>تمبرها و جوایز</h2>
-      <p>
-        شما تاکنون <strong>{user?.stamps ?? 0}</strong> تمبر جمع‌آوری کرده‌اید.
+      <p className="muted">
+        شما تاکنون <strong>{stamps}</strong> تمبر جمع‌آوری کرده‌اید.
       </p>
-      <p>
-        با هر مأموریت موفق، تمبر و امتیاز بیشتری کسب می‌کنید و به جوایز ویژه
-        نزدیک‌تر می‌شوید.
-      </p>
-      <div className="data-grid">
+      <div style={{ display: "flex", gap: 16, alignItems: "center", justifyContent: "center" }}>
+        <ProgressCircle value={stamps % nextRewardAt} max={nextRewardAt} label="تا جایزه بعدی" />
         <div>
-          <p className="label">تمبر فعلی</p>
-          <p className="value">{user?.stamps ?? 0}</p>
-        </div>
-        <div>
-          <p className="label">پیشنهاد امروز</p>
-          <p className="value">
-            {dashboard?.activeMissionsCount ?? 0} مأموریت فعال
-          </p>
+          <div className="label">تمبر فعلی</div>
+          <div className="value">{stamps}</div>
+          <div className="label">ماموریت‌های فعال</div>
+          <div className="value">{dashboard?.activeMissionsCount ?? 0}</div>
         </div>
       </div>
     </div>

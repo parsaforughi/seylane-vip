@@ -34,6 +34,23 @@ router.post("/create", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  try {
+    const data = await createMission({
+      title: req.body.title,
+      description: req.body.description,
+      type: req.body.type,
+      rewardPoints: req.body.rewardPoints,
+      rewardStamps: req.body.rewardStamps,
+      startDate: req.body.startDate ? new Date(req.body.startDate) : null,
+      endDate: req.body.endDate ? new Date(req.body.endDate) : null,
+    });
+    res.json({ success: true, data });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 router.post("/:missionId/update", async (req, res) => {
   try {
     const missionId = Number(req.params.missionId);

@@ -12,6 +12,33 @@ router.get("/", async (req: any, res, next) => {
   }
 });
 
+router.get("/me", async (req: any, res, next) => {
+  try {
+    const user = await getUserById(req.userId);
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.patch("/me", async (req: any, res, next) => {
+  try {
+    const { storeName, managerName, city, phone } = req.body || {};
+    if (!storeName || !managerName || !city || !phone) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+    const updated = await completeUserProfile(req.userId, {
+      storeName,
+      managerName,
+      city,
+      phone,
+    });
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post("/complete-profile", async (req: any, res, next) => {
   try {
     const { storeName, managerName, city, phone } = req.body || {};

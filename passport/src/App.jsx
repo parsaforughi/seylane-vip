@@ -1,5 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet, NavLink, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "./store/useAuthStore";
+import { fetchMe } from "./api/client";
+import MainLayout from "./layouts/MainLayout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Missions from "./pages/Missions";
@@ -11,56 +14,59 @@ import Referral from "./pages/Referral";
 import CompleteProfile from "./pages/CompleteProfile";
 import AdminPanel from "./pages/AdminPanel";
 
-const TABS = [
-  { id: "dashboard", label: "داشبورد", path: "/dashboard" },
-  { id: "missions", label: "مأموریت‌ها", path: "/missions" },
-  { id: "stamps", label: "تمبرها", path: "/stamps" },
-  { id: "profile", label: "پروفایل", path: "/profile" },
-];
-
 function RequireAuth() {
   const { token } = useAuthStore();
   const location = useLocation();
-
   if (!token) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
-
   return <Outlet />;
 }
 
-function MainLayout() {
-  return (
-    <div className="app-shell">
-      <header className="topbar">
-        <div className="logo-circle">S</div>
-        <div>
-          <strong>پاسپورت ویژه سیلانه</strong>
-          <p style={{ margin: 0, fontSize: 12, color: "rgba(248,248,255,0.7)" }}>
-            Seylane VIP Passport
-          </p>
-        </div>
-      </header>
-
-      <Outlet />
-
-      <nav className="tabs">
-        {TABS.map((item) => (
-          <NavLink
-            key={item.id}
-            to={item.path}
-            className={({ isActive }) => `tab-btn ${isActive ? "active" : ""}`}
-          >
-            {item.label}
-          </NavLink>
-        ))}
-      </nav>
-    </div>
-  );
-}
-
 function App() {
-  const { token, needsProfileCompletion } = useAuthStore();
+  const { token, setAuth, clearAuth, user } = useAuthStore();
+  const [bootstrapped, setBootstrapped] = useState(false);
+
+  useEffect(() => {
+    const maybeTelegramLogin = async () => {
+      if (token) return;
+      const initData = window.Telegram?.WebApp?.initData;
+      if (!initData) return;
+      try {
+        const { telegramLoginRequest } = await import("./api/client");
+        const { token: t, user: u } = await telegramLoginRequest(initData);
+        localStorage.setItem("vip_passport_token", t);
+        setAuth(t, u);
+      } catch (err) {
+        console.error("Telegram auto login failed", err);
+      }
+    };
+
+    const init = async () => {
+      await maybeTelegramLogin();
+      if (!token) {
+        setBootstrapped(true);
+        return;
+      }
+      try {
+        const me = await fetchMe();
+        setAuth(token, me);
+      } catch {
+        clearAuth();
+      } finally {
+        setBootstrapped(true);
+      }
+    };
+    init();
+  }, [token, setAuth, clearAuth]);
+
+  if (!bootstrapped) {
+    return <div className="app-shell"><p>در حال بارگذاری...</p></div>;
+  }
+
+  const needsProfileCompletion =
+    token &&
+    (!user?.storeName || !user?.managerName || !user?.phone || !user?.city);
 
   return (
     <BrowserRouter>
@@ -76,7 +82,7 @@ function App() {
             <Route path="/purchase" element={<Purchase />} />
             <Route path="/display" element={<Display />} />
             <Route path="/referral" element={<Referral />} />
-            <Route path="/admin-panel" element={<AdminPanel />} />
+            <Route path="/admin" element={<AdminPanel />} />
           </Route>
         </Route>
         <Route

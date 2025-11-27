@@ -52,4 +52,24 @@ router.post("/submit", async (req: any, res, next) => {
   }
 });
 
+router.post("/", async (req: any, res, next) => {
+  try {
+    const userId = req.userId;
+    const { storeName, managerName, phone, city, notes } = req.body;
+    if (!storeName || !managerName || !phone) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+    const item = await submitReferral(userId, {
+      storeName,
+      managerName,
+      phone,
+      city,
+      notes,
+    });
+    res.json(item);
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;

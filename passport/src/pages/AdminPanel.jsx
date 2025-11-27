@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { adminFetch, adminLogin, adminPost } from "../api/client";
+import { adminFetch, adminPost } from "../api/client";
 
 const tabs = [
   { id: "users", label: "کاربران", path: "users" },
@@ -17,8 +17,7 @@ function AdminPanel() {
   const [error, setError] = useState(null);
 
   const handleLogin = async () => {
-    const ok = await adminLogin(password);
-    if (!ok) {
+    if (password !== "vip-admin-123") {
       setError("رمز نادرست است.");
       return;
     }
@@ -40,9 +39,9 @@ function AdminPanel() {
     load();
   }, [authed, tab]);
 
-  const action = async (path) => {
+  const action = async (path, payload = {}) => {
     try {
-      await adminPost(path, {});
+      await adminPost(path, payload);
       const tabInfo = tabs.find((t) => t.id === tab);
       const result = await adminFetch(tabInfo.path);
       setData(result);
@@ -94,6 +93,13 @@ function AdminPanel() {
                 <div className="actions">
                   <button onClick={() => action(`missions/${item.id}/activate`)}>فعال</button>
                   <button onClick={() => action(`missions/${item.id}/deactivate`)}>غیرفعال</button>
+                </div>
+              )}
+              {tab === "missions" && (
+                <div className="actions">
+                  <button onClick={() => action(`missions`, { title: "ماموریت جدید", type: "CUSTOM" })}>
+                    ایجاد ماموریت ساده
+                  </button>
                 </div>
               )}
               {tab === "purchases" && (

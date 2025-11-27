@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE = "https://seylane-vip.onrender.com/api";
+export const API_BASE = "/api";
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -33,37 +33,47 @@ export async function demoLoginRequest() {
 }
 
 export async function telegramLoginRequest(initData) {
-  const response = await api.post("/auth/telegram-login", { initData });
+  const response = await api.post("/auth/telegram", { initData });
+  return response.data;
+}
+
+export async function fetchMe() {
+  const response = await api.get("/user/me");
   return response.data;
 }
 
 export async function completeProfileRequest(payload) {
-  const response = await api.post("/user/complete-profile", payload);
+  const response = await api.patch("/user/me", payload);
   return response.data;
 }
 
 export async function submitPurchaseRequest(payload) {
-  const response = await api.post("/purchases/submit", payload);
+  const response = await api.post("/purchase", payload);
   return response.data;
 }
 
 export async function submitDisplayRequest(payload) {
-  const response = await api.post("/displays/submit", payload);
+  const response = await api.post("/display", payload);
   return response.data;
 }
 
 export async function submitReferralRequest(payload) {
-  const response = await api.post("/referrals/submit", payload);
+  const response = await api.post("/referral", payload);
   return response.data;
 }
 
-export async function fetchQrImage() {
-  const response = await api.get("/user/qr", { responseType: "blob" });
+export async function uploadFile(file) {
+  const form = new FormData();
+  form.append("file", file);
+  const response = await api.post("/upload", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return response.data;
 }
 
-export async function adminLogin(password) {
-  return password === "vip-admin-123";
+export async function fetchQrImage(userId) {
+  const response = await api.get(`/qr/${userId}`, { responseType: "blob" });
+  return response.data;
 }
 
 export async function adminFetch(path) {

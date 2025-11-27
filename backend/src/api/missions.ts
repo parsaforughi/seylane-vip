@@ -3,9 +3,9 @@ import { listActiveMissions, startMission } from "../services/missionsService";
 
 const router = Router();
 
-router.get("/", async (_req, res, next) => {
+router.get("/", async (req: any, res, next) => {
   try {
-    const missions = await listActiveMissions();
+    const missions = await listActiveMissions(req.userId);
     res.json(missions);
   } catch (err) {
     next(err);
