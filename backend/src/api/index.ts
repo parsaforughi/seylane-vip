@@ -16,6 +16,11 @@ import uploadRouter from "./upload";
 import qrRouter from "./qr";
 
 export const apiRouter = Router();
+
+apiRouter.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/upload", uploadRouter);
 apiRouter.use("/qr", qrRouter);

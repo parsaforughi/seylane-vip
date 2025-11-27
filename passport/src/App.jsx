@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "./store/useAuthStore";
-import { fetchMe } from "./api/client";
+import { fetchMe, telegramLoginRequest } from "./api/client";
 import MainLayout from "./layouts/MainLayout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -33,7 +33,6 @@ function App() {
       const initData = window.Telegram?.WebApp?.initData;
       if (!initData) return;
       try {
-        const { telegramLoginRequest } = await import("./api/client");
         const { token: t, user: u } = await telegramLoginRequest(initData);
         localStorage.setItem("vip_passport_token", t);
         setAuth(t, u);

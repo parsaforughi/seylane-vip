@@ -1,6 +1,9 @@
 import axios from "axios";
 
-export const API_BASE = "/api";
+export const API_BASE =
+  import.meta.env?.DEV && typeof window !== "undefined"
+    ? "http://localhost:10000/api"
+    : "https://seylane-vip.onrender.com/api";
 
 const api = axios.create({
   baseURL: API_BASE,
