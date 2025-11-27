@@ -42,13 +42,7 @@ function Missions() {
     return <p>در حال دریافت مأموریت‌ها...</p>;
   }
 
-  if (error) {
-    return <p className="error">{error}</p>;
-  }
-
-  if (!missions.length) {
-    return <p>مأموریتی ثبت نشده است.</p>;
-  }
+  const safeMissions = missions || [];
 
   const actionButton = (type) => {
     if (type === "PURCHASE") return () => navigate("/purchase");
@@ -60,7 +54,7 @@ function Missions() {
   return (
     <PageContainer>
       <div className="missions-list">
-        {missions.map((mission, idx) => {
+        {safeMissions.map((mission, idx) => {
           const go = actionButton(mission.type);
           return (
             <GlassCard key={mission.id} className="mission-card animated-section" style={{ animationDelay: `${idx * 60}ms` }}>

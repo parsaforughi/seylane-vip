@@ -45,23 +45,13 @@ export async function fetchMe() {
   return response.data;
 }
 
-export async function completeProfileRequest(payload) {
-  const response = await api.patch("/user/me", payload);
+export async function fetchDashboard() {
+  const response = await api.get("/dashboard");
   return response.data;
 }
 
-export async function submitPurchaseRequest(payload) {
-  const response = await api.post("/purchase", payload);
-  return response.data;
-}
-
-export async function submitDisplayRequest(payload) {
-  const response = await api.post("/display", payload);
-  return response.data;
-}
-
-export async function submitReferralRequest(payload) {
-  const response = await api.post("/referral", payload);
+export async function fetchMissions() {
+  const response = await api.get("/missions");
   return response.data;
 }
 
@@ -76,16 +66,6 @@ export async function uploadFile(file) {
 
 export async function fetchQrImage(userId) {
   const response = await api.get(`/qr/${userId}`, { responseType: "blob" });
-  return response.data;
-}
-
-export async function adminFetch(path) {
-  const response = await api.get(`/admin/${path}`);
-  return response.data;
-}
-
-export async function adminPost(path, data) {
-  const response = await api.post(`/admin/${path}`, data);
   return response.data;
 }
 

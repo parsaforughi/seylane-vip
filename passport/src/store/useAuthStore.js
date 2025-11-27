@@ -44,4 +44,22 @@ export const useAuthStore = create((set) => ({
     }
     set({ user: null, token: null });
   },
+
+  setDemoAuth: () => {
+    const demoUser = {
+      id: 777,
+      storeName: "داروخانه مرکزی",
+      managerName: "خانم رضایی",
+      city: "تهران",
+      points: 1200,
+      stamps: 4,
+    };
+    const demoToken = "demo-token";
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem(tokenKey, demoToken);
+      localStorage.setItem(authKey, demoToken);
+      localStorage.setItem(userKey, JSON.stringify(demoUser));
+    }
+    set({ token: demoToken, user: demoUser });
+  },
 }));

@@ -6,7 +6,7 @@ import { demoLoginRequest, telegramLogin } from "../api/client";
 function Login({ telegramInitData = "" }) {
   const logo = "/seylane_logo.png";
   const navigate = useNavigate();
-  const { setAuth, token, user } = useAuthStore();
+  const { setAuth, setDemoAuth, token, user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [autoLoading, setAutoLoading] = useState(false);
@@ -58,6 +58,12 @@ function Login({ telegramInitData = "" }) {
     }
   };
 
+  const handleDemoVip = () => {
+    setError(null);
+    setDemoAuth();
+    navigate("/dashboard", { replace: true });
+  };
+
   return (
     <div className="app-shell">
       <div className="passport-page passport-login">
@@ -72,6 +78,9 @@ function Login({ telegramInitData = "" }) {
             <p className="muted">اگر تلگرام فعال باشد، ورود خودکار انجام می‌شود.</p>
             <button className="login-btn" onClick={handleLogin} disabled={loading || autoLoading}>
               {loading || autoLoading ? "در حال ورود..." : "ورود تست (بدون تلگرام)"}
+            </button>
+            <button className="login-btn" onClick={handleDemoVip} disabled={autoLoading}>
+              ورود تست VIP
             </button>
             <small>با ورود، شرایط باشگاه وفاداری را می‌پذیرید.</small>
             {autoLoading && <p>در حال بررسی ورود تلگرام...</p>}
