@@ -74,6 +74,7 @@ router.post("/telegram-login", async (req, res) => {
 
     const parsed = parseInitData(initData);
     const userRaw = parsed.user ? JSON.parse(parsed.user) : null;
+    console.log("TELEGRAM LOGIN", initData, userRaw);
     const authData = Object.keys(parsed).reduce<Record<string, any>>((acc, key) => {
       if (key !== "hash") acc[key] = parsed[key];
       return acc;
