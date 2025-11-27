@@ -4,12 +4,9 @@ import { api } from "../api/client";
 import GlassCard from "../components/GlassCard";
 import NeonButton from "../components/NeonButton";
 import PageContainer from "../components/PageContainer";
-import { useAuthStore } from "../store/useAuthStore";
-import { loadUserAndDashboard } from "../api/loaders";
 
 function Missions() {
   const navigate = useNavigate();
-  const { setUser } = useAuthStore();
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +16,6 @@ function Missions() {
     const load = async () => {
       setLoading(true);
       try {
-        await loadUserAndDashboard(setUser);
         const response = await api.get("/missions");
         if (!mounted) return;
         setMissions(response.data || []);
@@ -36,7 +32,7 @@ function Missions() {
     return () => {
       mounted = false;
     };
-  }, [setUser]);
+  }, []);
 
   const safeMissions = missions || [];
 
