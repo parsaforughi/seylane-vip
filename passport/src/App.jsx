@@ -64,17 +64,14 @@ function App() {
     return <div className="app-shell"><p>در حال بارگذاری...</p></div>;
   }
 
-  const needsProfileCompletion =
-    token &&
-    user &&
-    (!user.storeName || !user.managerName || !user.phone || !user.city);
+  const needsProfileCompletion = false;
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<RequireAuth />}>
-          <Route path="/complete-profile" element={<CompleteProfile />} />
+          {/* <Route path="/complete-profile" element={<CompleteProfile />} /> */}
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/missions" element={<Missions />} />
@@ -88,18 +85,7 @@ function App() {
         </Route>
         <Route
           path="*"
-          element={
-            <Navigate
-              to={
-                token
-                  ? needsProfileCompletion
-                    ? "/complete-profile"
-                    : "/dashboard"
-                  : "/login"
-              }
-              replace
-            />
-          }
+          element={<Navigate to={token ? "/dashboard" : "/login"} replace />}
         />
       </Routes>
     </BrowserRouter>
