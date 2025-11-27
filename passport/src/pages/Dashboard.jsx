@@ -60,43 +60,48 @@ function Dashboard() {
 
   return (
     <PageContainer>
-      <GlassCard className="animated-section">
-        <h1 style={{ margin: "0 0 8px", fontWeight: 600, fontSize: 26 }}>
-          سلام {user.storeName || user.firstName || "همراه"} عزیز
-        </h1>
-        <p className="muted" style={{ marginBottom: 16 }}>
-          به پاسپورت ویژه سیلانه خوش آمدی.
-        </p>
-        <div className="quick-actions" style={{ marginBottom: 8 }}>
-          <NeonButton onClick={() => navigate("/display")}>ثبت چیدمان</NeonButton>
-          <NeonButton onClick={() => navigate("/purchase")}>ثبت خرید</NeonButton>
-          <NeonButton onClick={() => navigate("/referral")}>معرفی مشتری VIP</NeonButton>
+      <GlassCard className="animated-section vip-card">
+        <h1 className="vip-title">سلام {user.storeName || user.firstName || "همراه"} عزیز</h1>
+        <p className="vip-subtitle">پاسپورت VIP سیلانه سبز</p>
+        <div className="identity-row">
+          <span>{user.city || "شهر نامشخص"}</span>
+          <span>•</span>
+          <span>{user.managerName || "مدیر نامشخص"}</span>
         </div>
       </GlassCard>
 
-      <GlassCard className="animated-section">
-        <div className="data-grid" style={{ alignItems: "center" }}>
-          <div>
+      <GlassCard className="animated-section vip-card">
+        <div className="vip-stats">
+          <div className="vip-stat">
             <p className="label">امتیاز</p>
             <p className="value">{dashboard.points ?? user.points ?? 0}</p>
           </div>
-          <div>
-            <p className="label">تمبرها</p>
+          <div className="vip-stat">
+            <p className="label">مهرها</p>
             <p className="value">{dashboard.stamps ?? user.stamps ?? 0}</p>
           </div>
-          <div>
-            <p className="label">در انتظار تایید</p>
-            <p className="value">{dashboard.pendingApprovalsCount ?? 0}</p>
+          <div className="vip-stat">
+            <p className="label">فعال / در انتظار</p>
+            <p className="value">
+              {dashboard.activeMissionsCount ?? 0}/{dashboard.pendingApprovalsCount ?? 0}
+            </p>
           </div>
         </div>
       </GlassCard>
 
-      <GlassCard className="animated-section" style={{ display: "grid", placeItems: "center" }}>
-        <ProgressCircle
-          value={(dashboard.stamps ?? user.stamps ?? 0) % 10}
-          max={10}
-          label="تا جایزه بعدی"
-        />
+      <GlassCard className="animated-section vip-card">
+        <div className="vip-progress">
+          <ProgressCircle
+            value={(dashboard.stamps ?? user.stamps ?? 0) % 10}
+            max={10}
+            label="تا جایزه بعدی"
+          />
+          <div className="vip-actions-grid">
+            <NeonButton onClick={() => navigate("/purchase")}>ثبت خرید</NeonButton>
+            <NeonButton onClick={() => navigate("/display")}>ثبت چیدمان</NeonButton>
+            <NeonButton onClick={() => navigate("/referral")}>معرفی VIP جدید</NeonButton>
+          </div>
+        </div>
       </GlassCard>
     </PageContainer>
   );

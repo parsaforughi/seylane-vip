@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
 import { useAuthStore } from "../store/useAuthStore";
 import { demoLoginRequest, telegramLoginRequest } from "../api/client";
 
 function Login() {
+  const logo = "/seylane_logo.png";
   const navigate = useNavigate();
   const { setAuth, token } = useAuthStore();
   const [loading, setLoading] = useState(false);
