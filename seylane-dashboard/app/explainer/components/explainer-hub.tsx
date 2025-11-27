@@ -11,7 +11,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import type { ExplainerConversation, ExplainerMessage } from '@/lib/types';
 import type { ExplainerStats } from '../types';
-import { useTranslation } from '@/components/providers/language-provider';
 import { getExplainerBaseUrl } from '@/lib/api/config';
 
 export function ExplainerHub() {
@@ -62,12 +61,11 @@ export function ExplainerHub() {
 }
 
 function StatsRow({ stats, isLoading }: { stats: ExplainerStats | null; isLoading: boolean }) {
-  const { t } = useTranslation();
   const statCards = [
-    { labelKey: 'explainer.stats.totalReceived', key: 'totalReceived' as const },
-    { labelKey: 'explainer.stats.totalSent', key: 'totalSent' as const },
-    { labelKey: 'explainer.stats.todayReceived', key: 'todayReceived' as const },
-    { labelKey: 'explainer.stats.todaySent', key: 'todaySent' as const },
+    { label: 'Total Received', key: 'totalReceived' as const },
+    { label: 'Total Sent', key: 'totalSent' as const },
+    { label: 'Today Received', key: 'todayReceived' as const },
+    { label: 'Today Sent', key: 'todaySent' as const },
   ];
 
   return (
@@ -75,7 +73,7 @@ function StatsRow({ stats, isLoading }: { stats: ExplainerStats | null; isLoadin
       {statCards.map((card) => (
         <Card key={card.key} className="border-white/5 bg-gradient-to-br from-white/10 to-transparent">
           <CardContent className="space-y-2">
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">{t(card.labelKey)}</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">{card.label}</p>
             {isLoading && !stats ? (
               <Skeleton className="h-10 w-1/2" />
             ) : (
@@ -96,18 +94,14 @@ interface ConversationColumnProps {
 }
 
 function ConversationColumn({ conversations, selectedConversationId, isLoading, onSelect }: ConversationColumnProps) {
-  const { t } = useTranslation();
-
   return (
     <Card className="h-full border-white/5 bg-white/5">
       <CardHeader className="flex items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-base">
           <LucideMessageSquare className="h-4 w-4 text-cyan-300" />
-          {t('explainer.conversations.title')}
+          Live Conversations
         </CardTitle>
-        <span className="text-xs uppercase tracking-[0.4em] text-white/50">
-          {t('explainer.conversations.openCount', { count: conversations.length })}
-        </span>
+        <span className="text-xs uppercase tracking-[0.4em] text-white/50">{conversations.length} open</span>
       </CardHeader>
       <CardContent>
         {isLoading && !conversations.length ? (
@@ -128,21 +122,21 @@ function ConversationColumn({ conversations, selectedConversationId, isLoading, 
                 >
                   <div className="flex items-center justify-between text-xs text-white/60">
                     <span className="font-semibold text-white">{conversation.username}</span>
-                    <span>{formatRelativeTime(conversation.lastMessageAt, t)}</span>
+                    <span>{formatRelativeTime(conversation.lastMessageAt)}</span>
                   </div>
                   <div className="mt-3 flex items-center gap-3 text-xs">
                     <span className="rounded-full border border-cyan-500/40 px-3 py-1 text-cyan-100">
-                      {t('explainer.conversations.inbound')} {conversation.inboundCount}
+                      Inbound {conversation.inboundCount}
                     </span>
                     <span className="rounded-full border border-fuchsia-500/40 px-3 py-1 text-fuchsia-100">
-                      {t('explainer.conversations.outbound')} {conversation.outboundCount}
+                      Outbound {conversation.outboundCount}
                     </span>
                   </div>
                 </button>
               ))}
               {!conversations.length && (
                 <p className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-4 text-sm text-white/60">
-                  {t('explainer.conversations.empty')}
+                  No active conversations detected yet.
                 </p>
               )}
             </div>
@@ -160,14 +154,12 @@ interface ChatWindowProps {
 }
 
 function ChatWindow({ conversation, messages, isLoading }: ChatWindowProps) {
-  const { t } = useTranslation();
-
   if (!conversation) {
     return (
       <Card className="border-white/10 bg-gradient-to-br from-white/5 to-transparent text-center">
         <CardContent className="py-16 text-white/70">
-          <p className="text-sm uppercase tracking-[0.4em] text-white/40">{t('explainer.chat.placeholderTitle')}</p>
-          <p className="mt-4 text-xl font-semibold text-white">{t('explainer.chat.placeholderBody')}</p>
+          <p className="text-sm uppercase tracking-[0.4em] text-white/40">Explainer feed</p>
+          <p className="mt-4 text-xl font-semibold text-white">Choose a conversation to open the Stark thread.</p>
         </CardContent>
       </Card>
     );
@@ -178,13 +170,11 @@ function ChatWindow({ conversation, messages, isLoading }: ChatWindowProps) {
       <CardHeader className="flex items-center justify-between">
         <div>
           <CardTitle>{conversation.username}</CardTitle>
-          <p className="text-xs text-white/60">
-            {conversation.inboundCount} {t('explainer.conversations.inbound')} / {conversation.outboundCount} {t('explainer.conversations.outbound')}
-          </p>
+          <p className="text-xs text-white/60">{conversation.inboundCount} inbound / {conversation.outboundCount} outbound</p>
         </div>
         <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.4em] text-white/50">
           <LucideArrowRight className="h-3 w-3" />
-          {t('explainer.chat.threadLabel')}
+          thread
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -211,7 +201,7 @@ function ChatWindow({ conversation, messages, isLoading }: ChatWindowProps) {
               ))}
               {!messages.length && (
                 <p className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-4 text-sm text-white/60">
-                  {t('explainer.chat.waiting')}
+                  Messages will stream in once the explainer responds.
                 </p>
               )}
             </div>
@@ -227,7 +217,6 @@ function ExplainerLogs() {
   const connected = useLogStreamStore((state) => state.connected);
   const connect = useLogStreamStore((state) => state.connect);
   const disconnect = useLogStreamStore((state) => state.disconnect);
-  const { t } = useTranslation();
 
   useEffect(() => {
     connect(`${getExplainerBaseUrl()}/logs`);
@@ -241,10 +230,10 @@ function ExplainerLogs() {
       <CardHeader className="flex items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-base">
           <LucideActivitySquare className="h-4 w-4 text-emerald-300" />
-          {t('explainer.logs.title')}
+          Explainer Logs
         </CardTitle>
         <span className={cn('text-xs uppercase tracking-[0.4em]', connected ? 'text-emerald-300' : 'text-white/40')}>
-          {connected ? t('explainer.logs.streaming') : t('explainer.logs.offline')}
+          {connected ? 'streaming' : 'offline'}
         </span>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -258,7 +247,7 @@ function ExplainerLogs() {
             ))}
             {!filteredLogs.length && (
               <p className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-3 text-sm text-white/50">
-                {t('explainer.logs.waiting')}
+                Waiting for StarkOS pulses…
               </p>
             )}
           </div>
@@ -268,16 +257,16 @@ function ExplainerLogs() {
   );
 }
 
-function formatRelativeTime(iso: string, t: (key: string, params?: Record<string, string | number>) => string) {
+function formatRelativeTime(iso: string) {
   const diffMs = Date.now() - new Date(iso).getTime();
   const minutes = Math.max(1, Math.floor(diffMs / 60000));
   if (minutes < 60) {
-    return t('time.minutesAgo', { value: minutes });
+    return `${minutes}m ago`;
   }
   const hours = Math.floor(minutes / 60);
   if (hours < 24) {
-    return t('time.hoursAgo', { value: hours });
+    return `${hours}h ago`;
   }
   const days = Math.floor(hours / 24);
-  return t('time.daysAgo', { value: days });
+  return `${days}d ago`;
 }

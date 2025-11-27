@@ -3,7 +3,7 @@ import { AutoHub } from './components/auto-hub';
 
 export default function AutoDmPage() {
   return (
-    <ModuleShell titleKey="modules.autodm.title" subtitleKey="modules.autodm.subtitle">
+    <ModuleShell title="Auto DM" subtitle="module // stark">
       <AutoHub />
     </ModuleShell>
   );

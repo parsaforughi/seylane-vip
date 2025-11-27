@@ -1,6 +1,6 @@
 {
-  "/api/mock/autodm/stats/route": "app/api/mock/autodm/stats/route.js",
-  "/autodm/page": "app/autodm/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/explainer/page": "app/explainer/page.js"
+  "/dashboard/autodm/page": "app/dashboard/autodm/page.js",
+  "/dashboard/explainer/page": "app/dashboard/explainer/page.js",
+  "/dashboard/iceball/page": "app/dashboard/iceball/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
 }

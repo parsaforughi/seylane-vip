@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { m } from 'framer-motion';
 import { useTranslation } from '@/components/providers/language-provider';
 import { useLanguageStore } from '@/lib/state/language-store';
-import { RobotCore } from '@/components/dashboard/RobotCore';
+import RobotCore from '@/app/(dashboard)/components/RobotCore';
 
 export function SentinelEye() {
   const { t } = useTranslation();

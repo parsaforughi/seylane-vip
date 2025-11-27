@@ -3,7 +3,7 @@ import { IceballHub } from './components/iceball-hub';
 
 export default function IceballPage() {
   return (
-    <ModuleShell titleKey="modules.iceball.title" subtitleKey="modules.iceball.subtitle">
+    <ModuleShell title="Iceball" subtitle="module // stark">
       <IceballHub />
     </ModuleShell>
   );

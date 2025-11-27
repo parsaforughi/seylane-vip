@@ -14,7 +14,7 @@ prisma.$connect().catch((error) => {
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", apiRouter);
+app.use(apiRouter);
 
 app.get("/health", async (_req, res) => {
   try {

@@ -7,7 +7,6 @@ import { Sparkline } from '@/components/ui/sparkline';
 import { Badge } from '@/components/ui/badge';
 import { cn, formatNumber } from '@/lib/utils';
 import type { Conversation, Message, ModuleStats } from '@/lib/types';
-import { useTranslation } from '@/components/providers/language-provider';
 
 interface Props {
   modules: ModuleStats[];
@@ -22,8 +21,6 @@ const moduleAccent: Record<string, string> = {
 };
 
 export function ModulesOverview({ modules, conversations, messages }: Props) {
-  const { t } = useTranslation();
-
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-3">
@@ -32,7 +29,7 @@ export function ModulesOverview({ modules, conversations, messages }: Props) {
             <Card className="relative overflow-hidden border-white/5 bg-white/5">
               <div className={cn('absolute inset-x-0 top-0 h-1.5 rounded-full bg-gradient-to-r', moduleAccent[item.module])} />
               <CardHeader className="flex items-center justify-between text-xs text-white/60">
-                <CardTitle className="text-white/80 capitalize">{t(`nav.${item.module}`)}</CardTitle>
+                <CardTitle className="text-white/80 capitalize">{item.module}</CardTitle>
                 <div className="flex items-center gap-1 text-emerald-300">
                   <LucideArrowUpRight className="h-3 w-3" />
                   <span>+{item.delta}%</span>
@@ -41,20 +38,16 @@ export function ModulesOverview({ modules, conversations, messages }: Props) {
               <CardContent className="space-y-3">
                 <div className="flex items-baseline gap-2">
                   <p className="text-3xl font-semibold">{formatNumber(item.throughput)}</p>
-                  <span className="text-xs uppercase tracking-[0.3em] text-white/50">{t('overview.throughput')}</span>
+                  <span className="text-xs uppercase tracking-[0.3em] text-white/50">throughput</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-white/70">
                   <div className="flex items-center gap-2">
                     <LucideActivity className="h-4 w-4 text-cyan-300" />
-                    <span>
-                      {item.accuracy}% {t('overview.integrity')}
-                    </span>
+                    <span>{item.accuracy}% integrity</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <LucideGauge className="h-4 w-4 text-fuchsia-300" />
-                    <span>
-                      {item.responseTime}s {t('overview.latency')}
-                    </span>
+                    <span>{item.responseTime}s latency</span>
                   </div>
                 </div>
                 <Sparkline points={item.trend} />
@@ -66,8 +59,8 @@ export function ModulesOverview({ modules, conversations, messages }: Props) {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="border-white/5 bg-white/5">
           <CardHeader className="flex items-center justify-between">
-            <CardTitle>{t('overview.conversations')}</CardTitle>
-            <Badge>{t('overview.live')}</Badge>
+            <CardTitle>Explainer Conversations</CardTitle>
+            <Badge>Live</Badge>
           </CardHeader>
           <CardContent className="space-y-4">
             {conversations.map((conversation) => (
@@ -79,9 +72,7 @@ export function ModulesOverview({ modules, conversations, messages }: Props) {
                 <p className="mt-2 text-lg font-semibold">{conversation.topic}</p>
                 <div className="mt-3 flex items-center justify-between text-sm text-white/70">
                   <span className="capitalize">{conversation.state}</span>
-                  <span>
-                    {conversation.progress}% {t('overview.synced')}
-                  </span>
+                  <span>{conversation.progress}% synced</span>
                 </div>
               </m.div>
             ))}
@@ -89,8 +80,8 @@ export function ModulesOverview({ modules, conversations, messages }: Props) {
         </Card>
         <Card className="border-white/5 bg-white/5">
           <CardHeader className="flex items-center justify-between">
-            <CardTitle>{t('overview.messages')}</CardTitle>
-            <Badge className="bg-fuchsia-500/20 text-fuchsia-200">{t('overview.pulse')}</Badge>
+            <CardTitle>Explainer Messages</CardTitle>
+            <Badge className="bg-fuchsia-500/20 text-fuchsia-200">Pulse</Badge>
           </CardHeader>
           <CardContent className="space-y-4">
             {messages.map((message) => (

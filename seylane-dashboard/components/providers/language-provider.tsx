@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import en from '@/locales/en.json';
 import fa from '@/locales/fa.json';
 import { useLanguageStore, type Language } from '@/lib/state/language-store';
@@ -22,7 +22,7 @@ const LanguageContext = createContext<LanguageContextValue>({
   t: (key) => key,
 });
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const currentLanguage = useLanguageStore((state) => state.currentLanguage);
 
   const value = useMemo<LanguageContextValue>(() => {
@@ -30,7 +30,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const translate = (key: string, params?: TranslationParams) => {
       const template = dictionary[key] ?? key;
       if (!params) return template;
-      return template.replace(/\{\{(.*?)\}\}/g, (_, rawToken) => {
+      return template.replace(/\{\{(.*?)\}\}/g, (_, rawToken: string) => {
         const token = String(rawToken).trim();
         const replacement = params[token];
         return replacement !== undefined ? String(replacement) : '';

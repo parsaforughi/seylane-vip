@@ -5,7 +5,6 @@ import type { AutoDmSequence } from '../types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useTranslation } from '@/components/providers/language-provider';
 
 interface Props {
   sequences: AutoDmSequence[];
@@ -13,16 +12,14 @@ interface Props {
 }
 
 export function SequenceList({ sequences, loading }: Props) {
-  const { t } = useTranslation();
-
   return (
     <Card className="border-white/5 bg-white/5">
       <CardHeader className="flex items-center justify-between">
         <div>
-          <CardTitle>{t('autodm.sequencesTitle')}</CardTitle>
-          <p className="text-xs text-white/60">{t('autodm.sequencesSubtitle')}</p>
+          <CardTitle>Sequences</CardTitle>
+          <p className="text-xs text-white/60">real-time autop messaging</p>
         </div>
-        <Badge className="bg-emerald-500/20 text-emerald-100">{t('autodm.liveCount', { count: sequences.length })}</Badge>
+        <Badge className="bg-emerald-500/20 text-emerald-100">{sequences.length} live</Badge>
       </CardHeader>
       <CardContent className="space-y-4">
         {loading && !sequences.length && <Skeleton className="h-48 w-full" />}
@@ -34,11 +31,11 @@ export function SequenceList({ sequences, loading }: Props) {
             </div>
             <div className="mt-3 flex items-center justify-between text-sm">
               <div>
-                <p className="text-xs text-white/50">{t('autodm.sendRate')}</p>
+                <p className="text-xs text-white/50">Send rate</p>
                 <p className="text-lg text-white">{sequence.sendRate}/m</p>
               </div>
               <div>
-                <p className="text-xs text-white/50">{t('autodm.conversion')}</p>
+                <p className="text-xs text-white/50">Conversion</p>
                 <p className="text-lg text-emerald-300">{sequence.conversion}%</p>
               </div>
             </div>

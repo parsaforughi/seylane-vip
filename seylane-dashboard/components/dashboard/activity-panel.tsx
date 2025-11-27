@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { useLogStreamStore } from '@/lib/state/log-stream-store';
 import type { ModuleKey } from '@/lib/types';
 import { getExplainerBaseUrl } from '@/lib/api/config';
-import { useTranslation } from '@/components/providers/language-provider';
 
 const modules: ModuleKey[] = ['explainer', 'autodm', 'iceball'];
 
@@ -18,7 +17,6 @@ export function ActivityPanel() {
   const connected = useLogStreamStore((state) => state.connected);
   const connect = useLogStreamStore((state) => state.connect);
   const disconnect = useLogStreamStore((state) => state.disconnect);
-  const { t } = useTranslation();
 
   useEffect(() => {
     const endpoint =
@@ -35,13 +33,13 @@ export function ActivityPanel() {
     <Card className="border-white/5 bg-white/5">
       <CardHeader className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <CardTitle>{t('activity.title')}</CardTitle>
-          <p className="text-xs uppercase tracking-[0.4em] text-white/50">{t('activity.subtitle')}</p>
+          <CardTitle>StarkOS Log Stream</CardTitle>
+          <p className="text-xs uppercase tracking-[0.4em] text-white/50">neon glass firewall</p>
         </div>
         <div className="flex gap-2">
           {modules.map((mod) => (
             <Button key={mod} variant={mod === selected ? 'primary' : 'ghost'} size="sm" onClick={() => setSelected(mod)}>
-              {t(`nav.${mod}`)}
+              {mod}
             </Button>
           ))}
         </div>
@@ -49,7 +47,7 @@ export function ActivityPanel() {
       <CardContent className="space-y-3">
         <div className="flex items-center gap-2 text-xs text-white/60">
           <LucideActivitySquare className={connected ? 'text-emerald-300' : 'text-red-300'} size={16} />
-          <span>{connected ? t('activity.live') : t('activity.reconnecting')}</span>
+          <span>{connected ? 'Live signal locked' : 'Reconnecting'}</span>
         </div>
         <div className="space-y-2 overflow-hidden">
           {filteredLogs.map((log) => (
@@ -61,7 +59,7 @@ export function ActivityPanel() {
               </div>
             </m.div>
           ))}
-          {!filteredLogs.length && <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/50">{t('activity.listening')}</p>}
+          {!filteredLogs.length && <p className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/50">Listening for transmissions...</p>}
         </div>
       </CardContent>
     </Card>

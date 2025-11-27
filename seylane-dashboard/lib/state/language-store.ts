@@ -10,17 +10,6 @@ interface LanguageState {
   setLanguage: (language: Language) => void;
 }
 
-const memoryStorage: Storage = {
-  getItem: () => null,
-  setItem: () => undefined,
-  removeItem: () => undefined,
-  clear: () => undefined,
-  key: () => null,
-  length: 0,
-};
-
-const storage = createJSONStorage(() => (typeof window === 'undefined' ? memoryStorage : localStorage));
-
 export const useLanguageStore = create<LanguageState>()(
   persist(
     (set) => ({
@@ -29,7 +18,7 @@ export const useLanguageStore = create<LanguageState>()(
     }),
     {
       name: 'mastermind-language',
-      storage,
+      storage: createJSONStorage(() => (typeof window === 'undefined' ? undefined : localStorage)),
     },
   ),
 );

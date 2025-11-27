@@ -1,8 +1,0 @@
-(globalThis.TURBOPACK_CHUNK_LISTS || (globalThis.TURBOPACK_CHUNK_LISTS = [])).push({
-    script: typeof document === "object" ? document.currentScript : undefined,
-    chunks: [
-  "static/chunks/5cdd0_59437268._.js",
-  "static/chunks/Desktop_seylane-vip_seylane-dashboard_a0251b34._.js"
-],
-    source: "dynamic"
-});

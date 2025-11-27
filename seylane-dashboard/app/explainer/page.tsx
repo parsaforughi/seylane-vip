@@ -3,7 +3,7 @@ import { ExplainerHub } from './components/explainer-hub';
 
 export default function ExplainerPage() {
   return (
-    <ModuleShell titleKey="modules.explainer.title" subtitleKey="modules.explainer.subtitle" actions={null}>
+    <ModuleShell title="Explainer" subtitle="module // stark" actions={null}>
       <ExplainerHub />
     </ModuleShell>
   );

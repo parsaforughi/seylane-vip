@@ -23,6 +23,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ['app/(dashboard)/components/RobotCore.tsx'],
+    rules: {
+      'react-hooks/exhaustive-deps': 'off',
+    },
+  },
+  {
     ignores: ['.next/**/*', 'node_modules/**/*', 'eslint.config.mjs', 'postcss.config.mjs'],
   },
 );
