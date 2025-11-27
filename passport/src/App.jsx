@@ -66,7 +66,8 @@ function App() {
 
   const needsProfileCompletion =
     token &&
-    (!user?.storeName || !user?.managerName || !user?.phone || !user?.city);
+    user &&
+    (!user.storeName || !user.managerName || !user.phone || !user.city);
 
   return (
     <BrowserRouter>

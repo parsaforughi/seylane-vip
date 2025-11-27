@@ -30,6 +30,9 @@ function CompleteProfile() {
     try {
       const user = await completeProfileRequest(form);
       setUser(user);
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(user));
+      }
       navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(err.message || "ثبت اطلاعات با خطا مواجه شد.");

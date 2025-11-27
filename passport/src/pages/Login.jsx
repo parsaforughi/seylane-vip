@@ -27,6 +27,8 @@ function Login() {
     telegramLoginRequest(initData)
       .then(({ token: t, user }) => {
         localStorage.setItem("vip_passport_token", t);
+        localStorage.setItem("auth", t);
+        localStorage.setItem("user", JSON.stringify(user));
         setAuth(t, user);
         const incomplete = !user.storeName || !user.managerName || !user.city || !user.phone;
         navigate(incomplete ? "/complete-profile" : "/dashboard", { replace: true });
@@ -44,6 +46,8 @@ function Login() {
     try {
       const result = await demoLoginRequest();
       localStorage.setItem("vip_passport_token", result.token);
+      localStorage.setItem("auth", result.token);
+      localStorage.setItem("user", JSON.stringify(result.user));
       setAuth(result.token, result.user);
       navigate("/dashboard", { replace: true });
     } catch (err) {
