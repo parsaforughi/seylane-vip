@@ -16,7 +16,7 @@ function MainLayout() {
       <PageContainer>
         <header className="topbar">
           <div className="brand">
-            <img src={logo} alt="Logo" className="brand-logo" />
+            <img src={logo} alt="Seylane Logo" className="brand-logo header-logo" />
             <div>
               <strong>Seylaneh VIP Passport</strong>
               <p className="muted">پاسپورت ویژه سیلانه</p>

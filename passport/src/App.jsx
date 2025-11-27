@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { useAuthStore } from "./store/useAuthStore";
-import { fetchMe } from "./api/client";
 import MainLayout from "./layouts/MainLayout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -23,30 +21,7 @@ function RequireAuth() {
 }
 
 function App({ telegramInitData = "" }) {
-  const { token, setAuth, clearAuth, user } = useAuthStore();
-  const [bootstrapped, setBootstrapped] = useState(false);
-
-  useEffect(() => {
-    const init = async () => {
-      if (!token) {
-        setBootstrapped(true);
-        return;
-      }
-      try {
-        const me = await fetchMe();
-        setAuth(token, me);
-      } catch {
-        clearAuth();
-      } finally {
-        setBootstrapped(true);
-      }
-    };
-    init();
-  }, [token, setAuth, clearAuth]);
-
-  if (!bootstrapped) {
-    return <div className="app-shell"><p>در حال بارگذاری...</p></div>;
-  }
+  const { token } = useAuthStore();
 
   return (
     <BrowserRouter>
@@ -64,10 +39,7 @@ function App({ telegramInitData = "" }) {
             <Route path="/admin" element={<AdminPanel />} />
           </Route>
         </Route>
-        <Route
-          path="*"
-          element={<Navigate to={token ? "/dashboard" : "/login"} replace />}
-        />
+        <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
       </Routes>
     </BrowserRouter>
   );

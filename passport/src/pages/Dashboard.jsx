@@ -27,14 +27,6 @@ function Dashboard() {
         setUser(userRes.data);
         setDashboard(dashRes.data);
         setError(null);
-        if (
-          !userRes.data?.storeName ||
-          !userRes.data?.managerName ||
-          !userRes.data?.city ||
-          !userRes.data?.phone
-        ) {
-          navigate("/complete-profile", { replace: true });
-        }
       } catch (err) {
         console.error(err);
         setError("خطا در دریافت اطلاعات از سرور.");
@@ -44,7 +36,7 @@ function Dashboard() {
     };
 
     load();
-  }, [setUser, navigate]);
+  }, []);
 
   if (loading) {
     return <p>در حال بارگذاری داشبورد...</p>;

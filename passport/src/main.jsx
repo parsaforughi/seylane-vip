@@ -4,13 +4,12 @@ import App from "./App";
 import "./styles.css";
 
 const initTelegramWebApp = () => {
+  if (typeof window === "undefined") return "";
   const webApp = window.Telegram?.WebApp;
-  if (!webApp) return { initData: "" };
+  if (!webApp) return "";
 
   webApp.ready();
   webApp.expand();
-
-  const initData = webApp.initData || "";
 
   const { themeParams = {} } = webApp;
   if (themeParams.bg_color) {
@@ -20,13 +19,14 @@ const initTelegramWebApp = () => {
   if (themeParams.text_color) {
     document.body.style.color = themeParams.text_color;
   }
-  return { initData };
+
+  return webApp.initData || "";
 };
 
-const tgInfo = initTelegramWebApp();
+const telegramInitData = initTelegramWebApp();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App telegramInitData={tgInfo?.initData || ""} />
+    <App telegramInitData={telegramInitData} />
   </React.StrictMode>
 );
