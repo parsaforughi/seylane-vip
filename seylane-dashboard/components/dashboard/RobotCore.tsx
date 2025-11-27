@@ -68,25 +68,25 @@ export function RobotCore() {
   return (
     <div className="flex w-full justify-center">
       <m.div
-        className="relative flex h-64 w-64 items-center justify-center"
+        className="relative flex h-60 w-60 items-center justify-center"
         animate={{ scale: [1, 1.015, 1], y: [-4, 4, -4] }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <div className="relative h-64 w-64 rounded-full bg-gradient-to-br from-purple-300 via-blue-300 to-cyan-200 p-6 shadow-[0_30px_60px_rgba(41,98,255,0.25)]">
+        <div className="relative h-60 w-60 rounded-full bg-gradient-to-br from-purple-300 via-blue-300 to-cyan-200 p-5 shadow-[0_30px_60px_rgba(41,98,255,0.25)]">
           <div className="absolute inset-4 rounded-full bg-white/15 blur-3xl" />
           <div className="absolute inset-2 rounded-full border border-white/30" />
-          <div className="absolute left-1/2 top-[30%] h-16 w-40 -translate-x-1/2 rounded-full bg-white/30 blur-3xl" />
-          <div className="absolute left-1/2 top-1/2 h-20 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/25 blur-xl" />
-          <div className="absolute inset-0 flex items-center justify-center gap-16">
+          <div className="absolute left-1/2 top-[30%] h-14 w-36 -translate-x-1/2 rounded-full bg-white/30 blur-3xl" />
+          <div className="absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/25 blur-xl" />
+          <div className="absolute inset-0 flex items-center justify-center gap-12">
             {['left', 'right'].map((side) => (
-              <div key={side} className="relative flex h-16 w-16 items-center justify-center">
+              <div key={side} className="relative flex h-12 w-12 items-center justify-center">
                 <div className="absolute h-full w-full rounded-full bg-white shadow-[inset_0_-6px_12px_rgba(0,0,0,0.08)]" />
                 <m.div
                   style={{ x: pupilX, y: pupilY }}
-                  className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-b from-cyan-500 to-blue-700 shadow-[0_10px_20px_rgba(0,0,0,0.35)]"
+                  className="relative flex h-[3.5rem] w-[3.5rem] items-center justify-center rounded-full bg-gradient-to-b from-cyan-500 to-blue-700 shadow-[0_10px_20px_rgba(0,0,0,0.35)]"
                 >
-                  <div className="absolute h-6 w-6 rounded-full bg-[#080a23]" />
-                  <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
+                  <div className="absolute h-3.5 w-3.5 rounded-full bg-[#080a23]" />
+                  <div className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
                 </m.div>
               </div>
             ))}
