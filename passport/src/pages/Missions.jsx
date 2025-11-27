@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
+import GlassCard from "../components/GlassCard";
+import NeonButton from "../components/NeonButton";
+import PageContainer from "../components/PageContainer";
 
 function Missions() {
   const navigate = useNavigate();
@@ -46,26 +49,30 @@ function Missions() {
   };
 
   return (
-    <div className="missions-list">
-      {missions.map((mission) => {
-        const go = actionButton(mission.type);
-        return (
-          <div key={mission.id} className="mission">
-            <h3>{mission.title || "بدون عنوان"}</h3>
-            <p className="muted">{mission.description || "بدون توضیحات"}</p>
-            <p className="label">نوع: {mission.type || "CUSTOM"}</p>
-            <p className="label">
-              وضعیت: {mission.userStatus || (mission.isActive ? "ACTIVE" : "INACTIVE")}
-            </p>
-            {go && (
-              <button className="primary-btn" onClick={go}>
-                اقدام
-              </button>
-            )}
-          </div>
-        );
-      })}
-    </div>
+    <PageContainer>
+      <div className="missions-list">
+        {missions.map((mission, idx) => {
+          const go = actionButton(mission.type);
+          return (
+            <GlassCard key={mission.id} className="mission-card animated-section" style={{ animationDelay: `${idx * 60}ms` }}>
+              <div className="mission-icon">{mission.type?.[0] || "M"}</div>
+              <div>
+                <h3 style={{ margin: "0 0 6px" }}>{mission.title || "بدون عنوان"}</h3>
+                <p className="muted" style={{ margin: 0 }}>{mission.description || "بدون توضیحات"}</p>
+                <p className="label" style={{ marginTop: 8 }}>
+                  وضعیت: {mission.userStatus || (mission.isActive ? "ACTIVE" : "INACTIVE")}
+                </p>
+                {go && (
+                  <NeonButton style={{ marginTop: 8, width: "auto", paddingInline: 16 }} onClick={go}>
+                    اقدام
+                  </NeonButton>
+                )}
+              </div>
+            </GlassCard>
+          );
+        })}
+      </div>
+    </PageContainer>
   );
 }
 

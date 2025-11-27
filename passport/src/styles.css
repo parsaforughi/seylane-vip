@@ -1,7 +1,15 @@
 :root {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  background-color: #040b1a;
-  color: #ffffff;
+  background-color: #020712;
+  color: #e8f0ff;
+  --navy: #050b1f;
+  --navy-2: #0a1026;
+  --glass: rgba(255, 255, 255, 0.03);
+  --border: rgba(255, 255, 255, 0.09);
+  --neon: #00ffa8;
+  --gold: #e8c97a;
+  --muted: #b0bcd5;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -15,10 +23,48 @@ body {
   min-height: 100%;
   direction: rtl;
   unicode-bidi: plaintext;
-  background: radial-gradient(circle at 20% 0%, rgba(0, 255, 191, 0.08), transparent 25%),
-    radial-gradient(circle at 80% 0%, rgba(232, 201, 122, 0.08), transparent 25%),
-    #040b1a;
-  color: #ffffff;
+  background: radial-gradient(circle at 20% 0%, rgba(0, 255, 168, 0.1), transparent 26%),
+    radial-gradient(circle at 80% 10%, rgba(232, 201, 122, 0.08), transparent 30%),
+    linear-gradient(145deg, #030816, #050b1f 60%, #020712);
+  color: #e8f0ff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes neonPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(0, 255, 168, 0.22);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(0, 255, 168, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(0, 255, 168, 0.22);
+  }
+}
+
+.page-container {
+  animation: fadeIn 0.5s ease;
 }
 
 #root {
@@ -26,9 +72,9 @@ body {
 }
 
 .app-shell {
-  max-width: 520px;
+  max-width: 540px;
   margin: 0 auto;
-  padding: 16px 16px 88px;
+  padding: 16px 16px 96px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -39,11 +85,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  border-radius: 20px;
-  background: rgba(4, 11, 26, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  animation: fadeIn 0.6s ease;
 }
 
 .brand {
@@ -53,27 +101,42 @@ body {
 }
 
 .brand-logo {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #061126;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(0, 255, 168, 0.15), rgba(232, 201, 122, 0.1));
+  border: 1px solid rgba(0, 255, 168, 0.35);
   padding: 6px;
   object-fit: contain;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .muted {
-  color: #b0bcd5;
+  color: var(--muted);
   font-size: 13px;
   margin: 0;
 }
 
-.card {
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 22px;
+.glass-card {
+  border: 1px solid var(--border);
+  border-radius: 24px;
   padding: 18px;
-  background: rgba(4, 11, 26, 0.9);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+  animation: slideUp 0.6s ease;
+}
+
+.animated-section {
+  animation: slideUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.animated-section:nth-child(odd) {
+  animation-delay: 80ms;
+}
+.animated-section:nth-child(even) {
+  animation-delay: 160ms;
 }
 
 .data-grid {
@@ -84,14 +147,14 @@ body {
 
 .label {
   font-size: 13px;
-  color: #b0bcd5;
+  color: var(--muted);
   margin-bottom: 2px;
 }
 
 .value {
   font-size: 20px;
   font-weight: 700;
-  color: #00ffbf;
+  color: var(--neon);
 }
 
 .missions-list {
@@ -100,77 +163,119 @@ body {
   gap: 12px;
 }
 
-.mission {
+.mission-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
   padding: 14px;
-  border-radius: 16px;
-  background: rgba(6, 17, 38, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  animation: slideUp 0.4s ease;
+}
+
+.mission-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(0, 255, 168, 0.15), rgba(0, 0, 0, 0.2));
+  border: 1px solid rgba(0, 255, 168, 0.35);
+  color: var(--neon);
+  font-weight: 700;
 }
 
 .login-btn,
-.primary-btn {
+.neon-btn {
   width: 100%;
   padding: 14px;
   border-radius: 14px;
-  border: 1px solid rgba(0, 255, 191, 0.35);
-  background: linear-gradient(135deg, rgba(0, 255, 191, 0.18), rgba(232, 201, 122, 0.18));
+  border: 1px solid rgba(0, 255, 168, 0.4);
+  background: linear-gradient(135deg, rgba(0, 255, 168, 0.18), rgba(232, 201, 122, 0.18));
   color: #ffffff;
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 10px 30px rgba(0, 255, 191, 0.2);
+  transition: all 0.22s ease;
+  box-shadow: 0 10px 30px rgba(0, 255, 168, 0.25);
 }
 
 .login-btn:hover,
-.primary-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 36px rgba(0, 255, 191, 0.25);
+.neon-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 16px 36px rgba(0, 255, 168, 0.32);
+}
+
+.neon-btn span {
+  display: inline-block;
+  position: relative;
+}
+
+.neon-btn span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.neon-btn:hover span::after {
+  opacity: 1;
 }
 
 .bottom-nav {
   position: fixed;
-  bottom: 12px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
-  width: min(520px, calc(100% - 24px));
+  width: min(540px, calc(100% - 22px));
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  padding: 10px;
+  padding: 12px;
   border-radius: 18px;
-  background: rgba(4, 11, 26, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  background: rgba(5, 11, 31, 0.8);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
 }
 
 .bottom-nav__item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   padding: 10px 8px;
   border-radius: 12px;
-  color: #b0bcd5;
+  color: var(--muted);
   text-decoration: none;
   position: relative;
 }
 
 .bottom-nav__item.active {
-  color: #00ffbf;
+  color: var(--neon);
 }
 
 .bottom-nav__indicator {
   width: 80%;
   height: 3px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(0, 255, 191, 0.6), rgba(232, 201, 122, 0.6));
+  background: linear-gradient(90deg, rgba(0, 255, 168, 0.8), rgba(232, 201, 122, 0.6));
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .bottom-nav__item.active .bottom-nav__indicator {
   opacity: 1;
+  transform: scaleX(1.02);
 }
 
 .logout-btn {
@@ -192,10 +297,19 @@ body {
 .form-grid select {
   width: 100%;
   padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
   color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-grid input:focus,
+.form-grid textarea:focus,
+.form-grid select:focus {
+  outline: none;
+  border-color: rgba(0, 255, 168, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 255, 168, 0.15);
 }
 
 .form-grid textarea {
@@ -205,7 +319,7 @@ body {
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
+  gap: 12px;
   margin: 14px 0;
 }
 
@@ -214,26 +328,28 @@ body {
 }
 
 .progress-circle {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   display: grid;
   place-items: center;
   position: relative;
+  animation: fadeIn 0.6s ease, neonPulse 2.5s ease infinite;
 }
 
 .progress-circle__ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: conic-gradient(#00ffbf var(--pct), rgba(255, 255, 255, 0.08) 0);
+  background: conic-gradient(var(--neon) var(--pct), rgba(255, 255, 255, 0.08) 0);
+  filter: drop-shadow(0 6px 20px rgba(0, 255, 168, 0.25));
 }
 
 .progress-circle__inner {
-  width: 110px;
-  height: 110px;
+  width: 124px;
+  height: 124px;
   border-radius: 50%;
-  background: rgba(4, 11, 26, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(4, 11, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: grid;
   place-items: center;
 }
@@ -246,36 +362,42 @@ body {
   text-align: center;
 }
 
+.passport-page {
+  width: 100%;
+}
+
 .passport-book {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
   padding: 16px;
-  border-radius: 20px;
-  background: rgba(6, 17, 38, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 22px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
 }
 
 .passport-left,
 .passport-right {
-  background: rgba(4, 11, 26, 0.9);
-  border-radius: 16px;
+  background: rgba(4, 11, 26, 0.7);
+  border-radius: 18px;
   padding: 16px;
   min-height: 220px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
 }
 
 .logo-circle {
   width: 64px;
   height: 64px;
   border-radius: 16px;
-  background: rgba(0, 255, 191, 0.08);
-  border: 1px solid rgba(0, 255, 191, 0.4);
+  background: rgba(0, 255, 168, 0.08);
+  border: 1px solid rgba(0, 255, 168, 0.4);
   display: grid;
   place-items: center;
 }
@@ -289,13 +411,21 @@ body {
   object-fit: contain;
 }
 
+.file-preview {
+  border: 1px dashed rgba(0, 255, 168, 0.35);
+  border-radius: 14px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+}
+
 .error {
   color: #ff9c9c;
 }
 
 @media (max-width: 520px) {
   .app-shell {
-    padding: 12px 12px 90px;
+    padding: 12px 12px 96px;
   }
 
   .passport-book {

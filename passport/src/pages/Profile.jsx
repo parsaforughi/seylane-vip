@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
 import { api, fetchQrImage } from "../api/client";
 import { useAuthStore } from "../store/useAuthStore";
+import GlassCard from "../components/GlassCard";
+import PageContainer from "../components/PageContainer";
+import NeonButton from "../components/NeonButton";
+
+const logo = "/seylane_logo.png";
 
 function Profile() {
   const { clearAuth, user: storedUser, setUser } = useAuthStore();
@@ -45,52 +49,52 @@ function Profile() {
   }
 
   return (
-    <div className="card">
-      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        <img src={logo} alt="logo" className="brand-logo" />
-        <div>
-          <h2 style={{ margin: 0 }}>پروفایل</h2>
-          <p className="muted">{user.storeName || "فروشگاه شما"}</p>
+    <PageContainer>
+      <GlassCard className="animated-section" style={{ textAlign: "center" }}>
+        <img src={logo} alt="logo" className="brand-logo" style={{ margin: "0 auto 8px" }} />
+        <h2 style={{ margin: 0 }}>پروفایل</h2>
+        <p className="muted">{user.storeName || "فروشگاه شما"}</p>
+        {qrUrl && (
+          <div style={{ marginTop: 12, textAlign: "center" }}>
+            <img src={qrUrl} alt="QR" style={{ width: 180, height: 180, borderRadius: 16 }} />
+            <p className="label" style={{ marginTop: 8 }}>
+              QR ورود سریع
+            </p>
+          </div>
+        )}
+        <div className="data-grid" style={{ marginTop: 14 }}>
+          <div>
+            <p className="label">نام مدیر</p>
+            <p className="value">{user.managerName || user.firstName || "نامشخص"}</p>
+          </div>
+          <div>
+            <p className="label">تلفن</p>
+            <p className="value">{user.phone || "نامشخص"}</p>
+          </div>
+          <div>
+            <p className="label">شهر</p>
+            <p className="value">{user.city || "نامشخص"}</p>
+          </div>
+          <div>
+            <p className="label">نام کاربری تلگرام</p>
+            <p className="value">{user.username ? `@${user.username}` : "ندارد"}</p>
+          </div>
+          <div>
+            <p className="label">وضعیت VIP</p>
+            <p className="value">{user.vipSince ? "فعال" : "غیرفعال"}</p>
+          </div>
         </div>
-      </div>
-      <div className="data-grid" style={{ marginTop: 12 }}>
-        <div>
-          <p className="label">نام مدیر</p>
-          <p className="value">{user.managerName || user.firstName || "نامشخص"}</p>
-        </div>
-        <div>
-          <p className="label">تلفن</p>
-          <p className="value">{user.phone || "نامشخص"}</p>
-        </div>
-        <div>
-          <p className="label">شهر</p>
-          <p className="value">{user.city || "نامشخص"}</p>
-        </div>
-        <div>
-          <p className="label">نام کاربری تلگرام</p>
-          <p className="value">{user.username ? `@${user.username}` : "ندارد"}</p>
-        </div>
-        <div>
-          <p className="label">وضعیت VIP</p>
-          <p className="value">{user.vipSince ? "فعال" : "غیرفعال"}</p>
-        </div>
-      </div>
-      {qrUrl && (
-        <div style={{ marginTop: 16, textAlign: "center" }}>
-          <p className="label">QR ورود سریع</p>
-          <img src={qrUrl} alt="QR" style={{ width: 160, height: 160, borderRadius: 12 }} />
-        </div>
-      )}
-      <button
-        className="logout-btn"
-        onClick={() => {
-          clearAuth();
-          window.location.href = "/login";
-        }}
-      >
-        خروج از حساب
-      </button>
-    </div>
+        <NeonButton
+          style={{ marginTop: 14 }}
+          onClick={() => {
+            clearAuth();
+            window.location.href = "/login";
+          }}
+        >
+          خروج از حساب
+        </NeonButton>
+      </GlassCard>
+    </PageContainer>
   );
 }
 

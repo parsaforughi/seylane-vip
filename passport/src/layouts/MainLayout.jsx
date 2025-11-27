@@ -1,5 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
-import logo from "../assets/logo.png";
+import PageContainer from "../components/PageContainer";
+
+const logo = "/seylane_logo.png";
 
 const tabs = [
   { id: "dashboard", label: "داشبورد", to: "/dashboard" },
@@ -11,19 +13,21 @@ const tabs = [
 function MainLayout() {
   return (
     <div className="app-shell">
-      <header className="topbar">
-        <div className="brand">
-          <img src={logo} alt="Logo" className="brand-logo" />
-          <div>
-            <strong>Seylaneh VIP Passport</strong>
-            <p className="muted">پاسپورت ویژه سیلانه</p>
+      <PageContainer>
+        <header className="topbar">
+          <div className="brand">
+            <img src={logo} alt="Logo" className="brand-logo" />
+            <div>
+              <strong>Seylaneh VIP Passport</strong>
+              <p className="muted">پاسپورت ویژه سیلانه</p>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main style={{ flex: 1 }}>
-        <Outlet />
-      </main>
+        <main style={{ flex: 1 }}>
+          <Outlet />
+        </main>
+      </PageContainer>
 
       <nav className="bottom-nav">
         {tabs.map((tab) => (

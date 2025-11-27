@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { submitPurchaseRequest, uploadFile } from "../api/client";
 import { useNavigate } from "react-router-dom";
+import GlassCard from "../components/GlassCard";
+import NeonButton from "../components/NeonButton";
+import PageContainer from "../components/PageContainer";
 
 function Purchase() {
   const navigate = useNavigate();
@@ -61,49 +64,56 @@ function Purchase() {
   };
 
   return (
-    <div className="card">
-      <h2>ثبت خرید</h2>
-      <form onSubmit={handleSubmit} className="form-grid">
-        <label>
-          تصویر فاکتور
-          <input type="file" accept="image/*" onChange={handleFile} />
-          {uploading && <p className="muted">در حال آپلود...</p>}
-          {form.imageUrl && <p className="muted">آپلود شد</p>}
-        </label>
-        <label>
-          مبلغ
-          <input
-            name="amount"
-            type="number"
-            value={form.amount}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          تاریخ خرید
-          <input
-            name="date"
-            type="date"
-            value={form.date}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          برندها (اختیاری)
-          <input name="brands" value={form.brands} onChange={handleChange} />
-        </label>
-        <label>
-          توضیحات
-          <textarea name="notes" value={form.notes} onChange={handleChange} />
-        </label>
-        <button className="login-btn" type="submit" disabled={loading}>
-          {loading ? "در حال ارسال..." : "ثبت خرید"}
-        </button>
-      </form>
-      {message && <p>{message}</p>}
-      {error && <p className="error">{error}</p>}
-    </div>
+    <PageContainer>
+      <GlassCard className="animated-section">
+        <h2>ثبت خرید</h2>
+        <form onSubmit={handleSubmit} className="form-grid">
+          <label>
+            تصویر فاکتور
+            <input type="file" accept="image/*" onChange={handleFile} />
+            <div className="file-preview">
+              {uploading
+                ? "در حال آپلود..."
+                : form.imageUrl
+                ? "تصویر انتخاب شد"
+                : "فایل خود را انتخاب کنید"}
+            </div>
+          </label>
+          <label>
+            مبلغ
+            <input
+              name="amount"
+              type="number"
+              value={form.amount}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            تاریخ خرید
+            <input
+              name="date"
+              type="date"
+              value={form.date}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            برندها (اختیاری)
+            <input name="brands" value={form.brands} onChange={handleChange} />
+          </label>
+          <label>
+            توضیحات
+            <textarea name="notes" value={form.notes} onChange={handleChange} />
+          </label>
+          <NeonButton type="submit" disabled={loading}>
+            {loading ? "در حال ارسال..." : "ثبت خرید"}
+          </NeonButton>
+        </form>
+        {message && <p>{message}</p>}
+        {error && <p className="error">{error}</p>}
+      </GlassCard>
+    </PageContainer>
   );
 }
 

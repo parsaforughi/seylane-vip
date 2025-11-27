@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuthStore } from "../store/useAuthStore";
 import ProgressCircle from "../components/ProgressCircle";
+import GlassCard from "../components/GlassCard";
+import PageContainer from "../components/PageContainer";
 
 function Stamps() {
   const { setUser } = useAuthStore();
@@ -49,21 +51,23 @@ function Stamps() {
   const nextRewardAt = 10;
 
   return (
-    <div className="card">
-      <h2>تمبرها و جوایز</h2>
-      <p className="muted">
-        شما تاکنون <strong>{stamps}</strong> تمبر جمع‌آوری کرده‌اید.
-      </p>
-      <div style={{ display: "flex", gap: 16, alignItems: "center", justifyContent: "center" }}>
-        <ProgressCircle value={stamps % nextRewardAt} max={nextRewardAt} label="تا جایزه بعدی" />
-        <div>
-          <div className="label">تمبر فعلی</div>
-          <div className="value">{stamps}</div>
-          <div className="label">ماموریت‌های فعال</div>
-          <div className="value">{dashboard?.activeMissionsCount ?? 0}</div>
+    <PageContainer>
+      <GlassCard className="animated-section" style={{ textAlign: "center" }}>
+        <h2 style={{ marginTop: 0 }}>تمبرها و جوایز</h2>
+        <p className="muted">
+          شما تاکنون <strong>{stamps}</strong> تمبر جمع‌آوری کرده‌اید.
+        </p>
+        <div style={{ display: "flex", gap: 16, alignItems: "center", justifyContent: "center" }}>
+          <ProgressCircle value={stamps % nextRewardAt} max={nextRewardAt} label="تا جایزه بعدی" />
+          <div style={{ textAlign: "right" }}>
+            <div className="label">تمبر فعلی</div>
+            <div className="value">{stamps}</div>
+            <div className="label">ماموریت‌های فعال</div>
+            <div className="value">{dashboard?.activeMissionsCount ?? 0}</div>
+          </div>
         </div>
-      </div>
-    </div>
+      </GlassCard>
+    </PageContainer>
   );
 }
 

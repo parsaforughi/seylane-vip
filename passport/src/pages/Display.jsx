@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { submitDisplayRequest, uploadFile } from "../api/client";
+import GlassCard from "../components/GlassCard";
+import NeonButton from "../components/NeonButton";
+import PageContainer from "../components/PageContainer";
 
 function Display() {
   const navigate = useNavigate();
@@ -54,39 +57,46 @@ function Display() {
   };
 
   return (
-    <div className="card">
-      <h2>ثبت چیدمان</h2>
-      <form onSubmit={handleSubmit} className="form-grid">
-        <label>
-          تصویر
-          <input type="file" accept="image/*" onChange={handleFile} />
-          {uploading && <p className="muted">در حال آپلود...</p>}
-          {form.imageUrl && <p className="muted">آپلود شد</p>}
-        </label>
-        <label>
-          برند
-          <input name="brand" value={form.brand} onChange={handleChange} />
-        </label>
-        <label>
-          موقعیت
-          <input
-            name="location"
-            value={form.location}
-            onChange={handleChange}
-            placeholder="مثلا: شعبه مرکزی"
-          />
-        </label>
-        <label>
-          توضیحات
-          <textarea name="notes" value={form.notes} onChange={handleChange} />
-        </label>
-        <button className="login-btn" type="submit" disabled={loading}>
-          {loading ? "در حال ارسال..." : "ثبت چیدمان"}
-        </button>
-      </form>
-      {message && <p>{message}</p>}
-      {error && <p className="error">{error}</p>}
-    </div>
+    <PageContainer>
+      <GlassCard className="animated-section">
+        <h2>ثبت چیدمان</h2>
+        <form onSubmit={handleSubmit} className="form-grid">
+          <label>
+            تصویر
+            <input type="file" accept="image/*" onChange={handleFile} />
+            <div className="file-preview">
+              {uploading
+                ? "در حال آپلود..."
+                : form.imageUrl
+                ? "تصویر انتخاب شد"
+                : "فایل خود را انتخاب کنید"}
+            </div>
+          </label>
+          <label>
+            برند
+            <input name="brand" value={form.brand} onChange={handleChange} />
+          </label>
+          <label>
+            موقعیت
+            <input
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              placeholder="مثلا: شعبه مرکزی"
+            />
+          </label>
+          <label>
+            توضیحات
+            <textarea name="notes" value={form.notes} onChange={handleChange} />
+          </label>
+          <NeonButton type="submit" disabled={loading}>
+            {loading ? "در حال ارسال..." : "ثبت چیدمان"}
+          </NeonButton>
+        </form>
+        {message && <p>{message}</p>}
+        {error && <p className="error">{error}</p>}
+      </GlassCard>
+    </PageContainer>
   );
 }
 

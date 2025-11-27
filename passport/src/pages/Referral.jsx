@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { submitReferralRequest } from "../api/client";
+import GlassCard from "../components/GlassCard";
+import NeonButton from "../components/NeonButton";
+import PageContainer from "../components/PageContainer";
 
 function Referral() {
   const [form, setForm] = useState({
@@ -36,46 +39,48 @@ function Referral() {
   };
 
   return (
-    <div className="card">
-      <h2>معرفی مشتری VIP</h2>
-      <form onSubmit={handleSubmit} className="form-grid">
-        <label>
-          نام فروشگاه
-          <input
-            name="storeName"
-            value={form.storeName}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          نام مدیر
-          <input
-            name="managerName"
-            value={form.managerName}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          تلفن
-          <input name="phone" value={form.phone} onChange={handleChange} required />
-        </label>
-        <label>
-          شهر
-          <input name="city" value={form.city} onChange={handleChange} />
-        </label>
-        <label>
-          توضیحات
-          <textarea name="notes" value={form.notes} onChange={handleChange} />
-        </label>
-        <button className="login-btn" type="submit" disabled={loading}>
-          {loading ? "در حال ارسال..." : "ثبت معرفی"}
-        </button>
-      </form>
-      {message && <p>{message}</p>}
-      {error && <p className="error">{error}</p>}
-    </div>
+    <PageContainer>
+      <GlassCard className="animated-section">
+        <h2>معرفی مشتری VIP</h2>
+        <form onSubmit={handleSubmit} className="form-grid">
+          <label>
+            نام فروشگاه
+            <input
+              name="storeName"
+              value={form.storeName}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            نام مدیر
+            <input
+              name="managerName"
+              value={form.managerName}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            تلفن
+            <input name="phone" value={form.phone} onChange={handleChange} required />
+          </label>
+          <label>
+            شهر
+            <input name="city" value={form.city} onChange={handleChange} />
+          </label>
+          <label>
+            توضیحات
+            <textarea name="notes" value={form.notes} onChange={handleChange} />
+          </label>
+          <NeonButton type="submit" disabled={loading}>
+            {loading ? "در حال ارسال..." : "ثبت معرفی"}
+          </NeonButton>
+        </form>
+        {message && <p>{message}</p>}
+        {error && <p className="error">{error}</p>}
+      </GlassCard>
+    </PageContainer>
   );
 }
 
