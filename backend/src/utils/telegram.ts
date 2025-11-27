@@ -20,3 +20,13 @@ export function verifyTelegramAuth(
 
   return computedHash === hash;
 }
+
+export function parseInitData(initData: string): Record<string, any> {
+  if (!initData) return {};
+  return initData.split("&").reduce<Record<string, any>>((acc, pair) => {
+    const [key, rawValue] = pair.split("=");
+    if (!key) return acc;
+    acc[key] = decodeURIComponent(rawValue ?? "");
+    return acc;
+  }, {});
+}

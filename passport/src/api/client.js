@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE = "https://seylane-vip.onrender.com";
+export const API_BASE = "https://seylane-vip.onrender.com/api";
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -32,8 +32,47 @@ export async function demoLoginRequest() {
   return response.data;
 }
 
-export async function telegramLoginRequest(userPayload) {
-  const response = await api.post("/auth/telegram", userPayload);
+export async function telegramLoginRequest(initData) {
+  const response = await api.post("/auth/telegram-login", { initData });
+  return response.data;
+}
+
+export async function completeProfileRequest(payload) {
+  const response = await api.post("/user/complete-profile", payload);
+  return response.data;
+}
+
+export async function submitPurchaseRequest(payload) {
+  const response = await api.post("/purchases/submit", payload);
+  return response.data;
+}
+
+export async function submitDisplayRequest(payload) {
+  const response = await api.post("/displays/submit", payload);
+  return response.data;
+}
+
+export async function submitReferralRequest(payload) {
+  const response = await api.post("/referrals/submit", payload);
+  return response.data;
+}
+
+export async function fetchQrImage() {
+  const response = await api.get("/user/qr", { responseType: "blob" });
+  return response.data;
+}
+
+export async function adminLogin(password) {
+  return password === "vip-admin-123";
+}
+
+export async function adminFetch(path) {
+  const response = await api.get(`/admin/${path}`);
+  return response.data;
+}
+
+export async function adminPost(path, data) {
+  const response = await api.post(`/admin/${path}`, data);
   return response.data;
 }
 

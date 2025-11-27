@@ -29,5 +29,7 @@ export async function upsertUserFromTelegram(input: {
   });
 
   const token = jwt.signToken(user.id);
-  return { user, token };
+  const needsProfileCompletion =
+    !user.storeName || !user.managerName || !user.city || !user.phone;
+  return { user, token, needsProfileCompletion };
 }

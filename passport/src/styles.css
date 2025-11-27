@@ -184,6 +184,36 @@ body {
   cursor: pointer;
 }
 
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.form-grid input,
+.form-grid textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f8fafc;
+}
+
+.form-grid textarea {
+  min-height: 80px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.admin-list .mission {
+  direction: ltr;
+}
+
 @media (max-width: 520px) {
   .app-shell {
     padding: 12px;

@@ -5,7 +5,7 @@ import { demoLoginRequest, devLoginRequest, telegramLoginRequest } from "../api/
 
 function Login() {
   const navigate = useNavigate();
-  const { setAuth, token } = useAuthStore();
+  const { setAuth, token, needsProfileCompletion } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [testLoading, setTestLoading] = useState(false);
@@ -13,21 +13,26 @@ function Login() {
   const [autoLoading, setAutoLoading] = useState(false);
   const autoLoginAttempted = useRef(false);
 
-  const saveAuth = ({ token, user }) => {
+  const saveAuth = ({ token, user, needsProfileCompletion }) => {
     localStorage.setItem("vip_passport_token", token);
-    setAuth({ token, user });
-    navigate("/dashboard", { replace: true });
+    setAuth({ token, user, needsProfileCompletion });
+    if (needsProfileCompletion) {
+      navigate("/complete-profile", { replace: true });
+    } else {
+      navigate("/dashboard", { replace: true });
+    }
   };
 
   useEffect(() => {
     if (token) {
-      navigate("/dashboard", { replace: true });
+      navigate(needsProfileCompletion ? "/complete-profile" : "/dashboard", { replace: true });
     }
-  }, [token, navigate]);
+  }, [token, needsProfileCompletion, navigate]);
 
   useEffect(() => {
+    const initData = window.Telegram?.WebApp?.initData;
     const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    if (!telegramUser || autoLoginAttempted.current) {
+    if (!telegramUser || !initData || autoLoginAttempted.current) {
       return;
     }
 
@@ -35,12 +40,7 @@ function Login() {
     setAutoLoading(true);
     const attemptLogin = async () => {
       try {
-        const result = await telegramLoginRequest({
-          telegramId: telegramUser.id,
-          firstName: telegramUser.first_name,
-          lastName: telegramUser.last_name,
-          username: telegramUser.username,
-        });
+        const result = await telegramLoginRequest(initData);
         saveAuth(result);
       } catch (err) {
         console.error(err);

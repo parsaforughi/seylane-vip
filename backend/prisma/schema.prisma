@@ -20,17 +20,26 @@ enum MissionLogStatus {
   COMPLETED
 }
 
+enum MissionType {
+  PURCHASE
+  DISPLAY
+  REFERRAL
+  TRAINING
+  ATTENDANCE
+  CUSTOM
+}
+
 model User {
   id            Int            @id @default(autoincrement())
   telegramId    Int?           @unique
   firstName     String?
   lastName      String?
   username      String?
-  phone         String?
   storeName     String?
   managerName   String?
   city          String?
   customerCode  String?
+  phone         String?
   points        Int            @default(0)
   stamps        Int            @default(0)
   vipSince      DateTime?
@@ -49,7 +58,12 @@ model Mission {
   title       String
   description String?
   reward      Int      @default(0)
+  rewardPoints Int     @default(0)
+  rewardStamps Int     @default(0)
+  type        MissionType @default(CUSTOM)
   isActive    Boolean  @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -58,6 +72,7 @@ model Mission {
   displays    Display[]
   purchases   Purchase[]
   referrals   Referral[]
+  missionUpdates MissionUpdate[]
 }
 
 model MissionLog {
@@ -81,6 +96,9 @@ model Display {
   mission   Mission          @relation(fields: [missionId], references: [id])
   missionId Int
   imageUrl  String
+  brand     String?
+  location  String?
+  notes     String?
   status    SubmissionStatus @default(PENDING)
   adminNote String?
   createdAt DateTime         @default(now())
@@ -94,8 +112,10 @@ model Purchase {
   mission   Mission          @relation(fields: [missionId], references: [id])
   missionId Int
   imageUrl  String
-  brand     String
   amount    Int              @default(0)
+  purchaseDate DateTime?
+  brands    String?
+  notes     String?
   status    SubmissionStatus @default(PENDING)
   adminNote String?
   createdAt DateTime         @default(now())
@@ -108,8 +128,11 @@ model Referral {
   userId    Int
   mission   Mission          @relation(fields: [missionId], references: [id])
   missionId Int
-  fullName  String
+  storeName String
+  managerName String
   phone     String
+  city      String?
+  notes     String?
   status    SubmissionStatus @default(PENDING)
   adminNote String?
   createdAt DateTime         @default(now())
@@ -120,10 +143,9 @@ model Notification {
   id        Int       @id @default(autoincrement())
   user      User      @relation(fields: [userId], references: [id])
   userId    Int
-  title     String
-  body      String
-  read      Boolean   @default(false)
-  readAt    DateTime?
+  type      String
+  message   String
+  isSent    Boolean   @default(false)
   createdAt DateTime  @default(now())
 }
 
@@ -134,5 +156,13 @@ model Stamp {
   mission   Mission? @relation(fields: [missionId], references: [id])
   missionId Int?
   count     Int
+  createdAt DateTime @default(now())
+}
+
+model MissionUpdate {
+  id        Int      @id @default(autoincrement())
+  mission   Mission  @relation(fields: [missionId], references: [id])
+  missionId Int
+  note      String?
   createdAt DateTime @default(now())
 }

@@ -1,4 +1,5 @@
 import prisma from "../utils/prisma";
+import { sendNotification } from "./notificationService";
 import { awardStamps } from "./stampService";
 
 export async function createMissionLog(
@@ -31,14 +32,29 @@ export async function approveMissionLog(missionLogId: number) {
   if (missionLog.status !== "PENDING")
     throw new Error("Mission log is not pending");
 
-  const reward = missionLog.mission.reward ?? 0;
+  const rewardStamps =
+    missionLog.mission.rewardStamps ?? missionLog.mission.reward ?? 0;
+  const rewardPoints = missionLog.mission.rewardPoints ?? 0;
 
   return prisma.$transaction(async (tx) => {
     const updated = await tx.missionLog.update({
       where: { id: missionLogId },
       data: { status: "APPROVED" },
     });
-    await awardStamps(missionLog.userId, reward, tx);
+    if (rewardStamps > 0) {
+      await awardStamps(missionLog.userId, rewardStamps, tx);
+    }
+    if (rewardPoints > 0) {
+      await tx.user.update({
+        where: { id: missionLog.userId },
+        data: { points: { increment: rewardPoints } },
+      });
+    }
+    await sendNotification(
+      missionLog.userId,
+      "mission-approved",
+      `ماموریت ${missionLog.mission.title} تایید شد.`
+    );
     return updated;
   });
 }
@@ -51,8 +67,14 @@ export async function rejectMissionLog(missionLogId: number, reason?: string) {
   if (missionLog.status !== "PENDING")
     throw new Error("Mission log is not pending");
 
-  return prisma.missionLog.update({
+  const updated = await prisma.missionLog.update({
     where: { id: missionLogId },
     data: { status: "REJECTED", adminNote: reason },
   });
+  await sendNotification(
+    missionLog.userId,
+    "mission-rejected",
+    `ماموریت شما رد شد${reason ? `: ${reason}` : ""}`
+  );
+  return updated;
 }

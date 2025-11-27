@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../api/client";
+import { api, fetchQrImage } from "../api/client";
 import { useAuthStore } from "../store/useAuthStore";
 
 function Profile() {
@@ -7,6 +7,7 @@ function Profile() {
   const [user, setLocalUser] = useState(storedUser);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [qrUrl, setQrUrl] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -16,6 +17,9 @@ function Profile() {
         setLocalUser(response.data);
         setUser(response.data);
         setError(null);
+        const blob = await fetchQrImage();
+        const url = URL.createObjectURL(blob);
+        setQrUrl(url);
       } catch (err) {
         console.error(err);
         setError("خطا در دریافت اطلاعات کاربر.");
@@ -57,9 +61,15 @@ function Profile() {
         </div>
         <div>
           <p className="label">وضعیت VIP</p>
-          <p className="value">{user.vipSince ? "فعال" : "غیرفعال"}</p>
+      <p className="value">{user.vipSince ? "فعال" : "غیرفعال"}</p>
         </div>
       </div>
+      {qrUrl && (
+        <div style={{ marginTop: 16, textAlign: "center" }}>
+          <p className="label">QR ورود سریع</p>
+          <img src={qrUrl} alt="QR" style={{ width: 160, height: 160 }} />
+        </div>
+      )}
       <button className="logout-btn" onClick={logout}>
         خروج از حساب
       </button>

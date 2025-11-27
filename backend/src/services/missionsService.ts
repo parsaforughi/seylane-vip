@@ -21,3 +21,53 @@ export async function startMission(userId: number, missionId: number) {
     },
   });
 }
+
+export async function findActiveMissionByType(
+  type: "PURCHASE" | "DISPLAY" | "REFERRAL" | "TRAINING" | "ATTENDANCE" | "CUSTOM"
+) {
+  return prisma.mission.findFirst({
+    where: { isActive: true, type },
+    orderBy: { id: "asc" },
+  });
+}
+
+export async function createMission(data: {
+  title: string;
+  description?: string;
+  type: any;
+  rewardPoints?: number;
+  rewardStamps?: number;
+  startDate?: Date | null;
+  endDate?: Date | null;
+}) {
+  return prisma.mission.create({
+    data: {
+      title: data.title,
+      description: data.description,
+      type: data.type,
+      rewardPoints: data.rewardPoints ?? 0,
+      rewardStamps: data.rewardStamps ?? 0,
+      startDate: data.startDate ?? undefined,
+      endDate: data.endDate ?? undefined,
+    },
+  });
+}
+
+export async function updateMission(
+  missionId: number,
+  data: Partial<{
+    title: string;
+    description: string;
+    type: any;
+    rewardPoints: number;
+    rewardStamps: number;
+    startDate: Date | null;
+    endDate: Date | null;
+    isActive: boolean;
+  }>
+) {
+  return prisma.mission.update({
+    where: { id: missionId },
+    data,
+  });
+}

@@ -21,7 +21,26 @@ router.post("/:missionId", async (req: any, res, next) => {
     const userId = req.userId;
     const missionId = Number(req.params.missionId);
     const { imageUrl } = req.body;
-    const item = await submitDisplay(userId, missionId, imageUrl);
+    const item = await submitDisplay(userId, { imageUrl });
+    res.json(item);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/submit", async (req: any, res, next) => {
+  try {
+    const userId = req.userId;
+    const { imageUrl, brand, location, notes } = req.body;
+    if (!imageUrl) {
+      return res.status(400).json({ error: "imageUrl required" });
+    }
+    const item = await submitDisplay(userId, {
+      imageUrl,
+      brand,
+      location,
+      notes,
+    });
     res.json(item);
   } catch (err) {
     next(err);

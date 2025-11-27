@@ -3,6 +3,7 @@ import prisma from "../../utils/prisma";
 import {
   approveReferral,
   rejectReferral,
+  markReferralConverted,
 } from "../../services/referralService";
 
 const router = Router();
@@ -32,6 +33,16 @@ router.post("/:id/reject", async (req, res) => {
   try {
     const id = Number(req.params.id);
     const data = await rejectReferral(id, req.body.reason);
+    res.json({ success: true, data });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.post("/:id/mark-converted", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const data = await markReferralConverted(id);
     res.json({ success: true, data });
   } catch (err: any) {
     res.status(400).json({ error: err.message });

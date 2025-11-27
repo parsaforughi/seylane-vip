@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upsertUserFromTelegram } from "../../services/authService";
-import { verifyTelegramAuth } from "../../utils/telegram";
+import { parseInitData, verifyTelegramAuth } from "../../utils/telegram";
 
 const router = Router();
 
@@ -26,19 +26,47 @@ router.post("/telegram-login", async (req, res) => {
     if (!botToken) {
       return res.status(500).json({ error: "Bot token not configured" });
     }
-    const { hash, ...rest } = req.body || {};
-    if (!verifyTelegramAuth({ hash, ...rest }, botToken)) {
-      return res.status(401).json({ error: "Invalid Telegram auth hash" });
-    }
+    const { initData, ...legacy } = req.body || {};
 
-    const result = await upsertUserFromTelegram({
-      telegramId: rest.id,
-      firstName: rest.first_name,
-      lastName: rest.last_name,
-      username: rest.username,
-      phone: undefined,
-    });
-    return res.json(result);
+    if (initData) {
+      const parsed = parseInitData(initData);
+      const userRaw = parsed.user ? JSON.parse(parsed.user) : null;
+      const authData = {
+        ...parsed,
+        user: undefined,
+        id: userRaw?.id,
+        first_name: userRaw?.first_name,
+        last_name: userRaw?.last_name,
+        username: userRaw?.username,
+        hash: parsed.hash,
+      };
+      if (!verifyTelegramAuth(authData, botToken)) {
+        return res.status(401).json({ error: "Invalid Telegram auth hash" });
+      }
+
+      const result = await upsertUserFromTelegram({
+        telegramId: userRaw?.id,
+        firstName: userRaw?.first_name,
+        lastName: userRaw?.last_name,
+        username: userRaw?.username,
+        phone: undefined,
+      });
+      return res.json(result);
+    } else {
+      const { hash, ...rest } = legacy;
+      if (!verifyTelegramAuth({ hash, ...rest }, botToken)) {
+        return res.status(401).json({ error: "Invalid Telegram auth hash" });
+      }
+
+      const result = await upsertUserFromTelegram({
+        telegramId: rest.id,
+        firstName: rest.first_name,
+        lastName: rest.last_name,
+        username: rest.username,
+        phone: undefined,
+      });
+      return res.json(result);
+    }
   } catch (err: any) {
     return res.status(400).json({ error: err.message });
   }

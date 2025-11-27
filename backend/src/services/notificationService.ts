@@ -2,15 +2,15 @@ import prisma from "../utils/prisma";
 
 export async function sendNotification(
   userId: number,
-  title: string,
-  body: string
+  type: string,
+  message: string
 ) {
   return prisma.notification.create({
     data: {
       userId,
-      title,
-      body,
-      read: false,
+      type,
+      message,
+      isSent: true,
     },
   });
 }

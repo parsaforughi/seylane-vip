@@ -5,6 +5,11 @@ import Dashboard from "./pages/Dashboard";
 import Missions from "./pages/Missions";
 import Stamps from "./pages/Stamps";
 import Profile from "./pages/Profile";
+import Purchase from "./pages/Purchase";
+import Display from "./pages/Display";
+import Referral from "./pages/Referral";
+import CompleteProfile from "./pages/CompleteProfile";
+import AdminPanel from "./pages/AdminPanel";
 
 const TABS = [
   { id: "dashboard", label: "داشبورد", path: "/dashboard" },
@@ -55,21 +60,40 @@ function MainLayout() {
 }
 
 function App() {
-  const { token } = useAuthStore();
+  const { token, needsProfileCompletion } = useAuthStore();
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<RequireAuth />}>
+          <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/missions" element={<Missions />} />
             <Route path="/stamps" element={<Stamps />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/purchase" element={<Purchase />} />
+            <Route path="/display" element={<Display />} />
+            <Route path="/referral" element={<Referral />} />
+            <Route path="/admin-panel" element={<AdminPanel />} />
           </Route>
         </Route>
-        <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={
+                token
+                  ? needsProfileCompletion
+                    ? "/complete-profile"
+                    : "/dashboard"
+                  : "/login"
+              }
+              replace
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
