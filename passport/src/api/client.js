@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE = "https://seylane-vip.onrender.com/api";
+export const API_BASE = "https://seylane-vip.onrender.com";
 
 const api = axios.create({
   baseURL: API_BASE,
