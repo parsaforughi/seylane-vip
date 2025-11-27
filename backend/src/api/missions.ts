@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { listActiveMissions, startMission } from "../services/missionsService.js";
+import { listActiveMissions, startMission } from "../services/missionsService";
 
 const router = Router();
 

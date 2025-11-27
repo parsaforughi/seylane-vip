@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   submitReferral,
   listUserReferrals,
-} from "../services/referralService.js";
+} from "../services/referralService";
 
 const router = Router();
 

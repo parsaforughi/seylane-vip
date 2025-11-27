@@ -1,5 +1,5 @@
-import prisma from "../utils/prisma.js";
-import { awardStamps } from "./stampService.js";
+import prisma from "../utils/prisma";
+import { awardStamps } from "./stampService";
 
 export async function createMissionLog(
   userId: number,
@@ -31,8 +31,7 @@ export async function approveMissionLog(missionLogId: number) {
   if (missionLog.status !== "PENDING")
     throw new Error("Mission log is not pending");
 
-  const reward =
-    missionLog.mission.rewardStamps ?? missionLog.mission.rewardPoints ?? 0;
+  const reward = missionLog.mission.reward ?? 0;
 
   return prisma.$transaction(async (tx) => {
     const updated = await tx.missionLog.update({

@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   submitPurchase,
   listUserPurchases,
-} from "../services/purchaseService.js";
+} from "../services/purchaseService";
 
 const router = Router();
 

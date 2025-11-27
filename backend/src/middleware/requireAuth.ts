@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utils/jwt.js";
+import { verifyToken } from "../utils/jwt";
 
 export default function requireAuth(
   req: Request & { userId?: number },

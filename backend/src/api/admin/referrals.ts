@@ -1,9 +1,9 @@
 import { Router } from "express";
-import prisma from "../../utils/prisma.js";
+import prisma from "../../utils/prisma";
 import {
   approveReferral,
   rejectReferral,
-} from "../../services/referralService.js";
+} from "../../services/referralService";
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { upsertUserFromTelegram } from "../../services/authService.js";
-import { verifyTelegramAuth } from "../../utils/telegram.js";
+import { upsertUserFromTelegram } from "../../services/authService";
+import { verifyTelegramAuth } from "../../utils/telegram";
 
 const router = Router();
 
@@ -41,6 +41,20 @@ router.post("/telegram-login", async (req, res) => {
     return res.json(result);
   } catch (err: any) {
     return res.status(400).json({ error: err.message });
+  }
+});
+
+router.post("/demo-login", async (_req, res, next) => {
+  try {
+    const result = await upsertUserFromTelegram({
+      telegramId: 999_999_999,
+      firstName: "VIP",
+      lastName: "Demo",
+      username: "vip_demo",
+    });
+    res.json(result);
+  } catch (err) {
+    next(err);
   }
 });
 

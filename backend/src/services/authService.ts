@@ -1,5 +1,5 @@
-import prisma from "../utils/prisma.js";
-import jwt from "../utils/jwt.js";
+import prisma from "../utils/prisma";
+import jwt from "../utils/jwt";
 
 export async function upsertUserFromTelegram(input: {
   telegramId: number | string;

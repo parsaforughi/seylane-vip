@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   submitDisplay,
   listUserDisplays,
-} from "../services/displayService.js";
+} from "../services/displayService";
 
 const router = Router();
 

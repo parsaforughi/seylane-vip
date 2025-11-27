@@ -1,0 +1,15 @@
+__turbopack_load_page_chunks__("/_app", [
+  "static/chunks/5cdd0_next_dist_compiled_cc932d27._.js",
+  "static/chunks/5cdd0_next_dist_shared_lib_028586a3._.js",
+  "static/chunks/5cdd0_next_dist_client_53a2fdd4._.js",
+  "static/chunks/5cdd0_next_dist_b279ad77._.js",
+  "static/chunks/5cdd0_next_app_caeab387.js",
+  "static/chunks/[next]_entry_page-loader_ts_702b1386._.js",
+  "static/chunks/5cdd0_react_a39a6d98._.js",
+  "static/chunks/5cdd0_react-dom_cjs_react-dom_development_b0a0759a.js",
+  "static/chunks/5cdd0_react-dom_696bbd2f._.js",
+  "static/chunks/5cdd0_1db9cdb3._.js",
+  "static/chunks/[root-of-the-server]__c2a06b97._.js",
+  "static/chunks/Desktop_seylane-vip_seylane-dashboard_pages__app_2da965e7._.js",
+  "static/chunks/turbopack-Desktop_seylane-vip_seylane-dashboard_pages__app_d5028910._.js"
+])

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/macbookair/Desktop/seylane-vip/seylane-dashboard/components/dashboard/providers.tsx"],"sourcesContent":["'use client';\n\nimport { Suspense } from 'react';\nimport { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion';\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <LazyMotion features={domAnimation} strict>\n      <Suspense fallback={null}>\n        <AnimatePresence mode=\"wait\">{children}</AnimatePresence>\n      </Suspense>\n    </LazyMotion>\n  );\n}\n"],"names":[],"mappings":";;;;;AAEA;AACA;AAAA;AAAA;AAHA;;;;AAKO,SAAS,UAAU,EAAE,QAAQ,EAAiC;IACnE,qBACE,kQAAC,0PAAU;QAAC,UAAU,iQAAY;QAAE,MAAM;kBACxC,cAAA,kQAAC,8OAAQ;YAAC,UAAU;sBAClB,cAAA,kQAAC,oQAAe;gBAAC,MAAK;0BAAQ;;;;;;;;;;;;;;;;AAItC;KARgB","debugId":null}}]
+}

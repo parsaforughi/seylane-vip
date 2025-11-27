@@ -1,42 +1,38 @@
-import { useEffect, useState } from "react";
-import { api } from "../api/client";
+import { useAuthStore } from "../store/useAuthStore";
 
-export default function Profile() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+function Profile({ user }) {
+  const { logout } = useAuthStore();
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await api.get("/user");
-        setUser(res.data);
-      } catch (err) {
-        console.error(err);
-        setError("خطا در دریافت پروفایل");
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, []);
-
-  if (loading) return <p>در حال بارگذاری...</p>;
-  if (error) return <p className="error">{error}</p>;
+  if (!user) {
+    return <p>اطلاعات کاربر یافت نشد.</p>;
+  }
 
   return (
     <div className="card">
-      <h3 className="section-title">پروفایل</h3>
-      <p className="value">نام: {user?.firstName || "—"}</p>
-      <p className="value">نام خانوادگی: {user?.lastName || "—"}</p>
-      <p className="value">
-        نام کاربری: {user?.username ? `@${user.username}` : "—"}
-      </p>
-      <p className="value">شهر: {user?.city || "—"}</p>
-      <p className="value">فروشگاه: {user?.storeName || "—"}</p>
-      <p className="value">مدیر: {user?.managerName || "—"}</p>
-      <p className="value">امتیاز: {user?.points ?? 0}</p>
-      <p className="value">تمبر: {user?.stamps ?? 0}</p>
+      <h2>پروفایل</h2>
+      <div className="data-grid">
+        <div>
+          <p className="label">نام</p>
+          <p className="value">{user.firstName || "نامشخص"}</p>
+        </div>
+        <div>
+          <p className="label">نام خانوادگی</p>
+          <p className="value">{user.lastName || "نامشخص"}</p>
+        </div>
+        <div>
+          <p className="label">نام کاربری تلگرام</p>
+          <p className="value">{user.username ? `@${user.username}` : "ندارد"}</p>
+        </div>
+        <div>
+          <p className="label">وضعیت VIP</p>
+          <p className="value">{user.vipSince ? "فعال" : "غیرفعال"}</p>
+        </div>
+      </div>
+      <button className="logout-btn" onClick={logout}>
+        خروج از حساب
+      </button>
     </div>
   );
 }
+
+export default Profile;

@@ -1,0 +1,41 @@
+{
+  "sorted_middleware": [
+    "/api/mock/autodm/logs/route"
+  ],
+  "middleware": {},
+  "instrumentation": null,
+  "functions": {
+    "/api/mock/autodm/logs/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "server/server-reference-manifest.js",
+        "server/app/api/mock/autodm/logs/route_client-reference-manifest.js",
+        "server/edge/chunks/76525__next-internal_server_app_api_mock_autodm_logs_route_actions_482bd2a3.js",
+        "server/edge/chunks/5cdd0_next_dist_esm_2a7f1d01._.js",
+        "server/edge/chunks/5cdd0_next_dist_compiled_31a34ff3._.js",
+        "server/edge/chunks/5cdd0_next_dist_bb56700b._.js",
+        "server/edge/chunks/Desktop_seylane-vip_seylane-dashboard_edge-wrapper_67631597.js",
+        "server/edge/chunks/[root-of-the-server]__814536e8._.js",
+        "server/edge/chunks/turbopack-Desktop_seylane-vip_seylane-dashboard_edge-wrapper_c1a2e8f3.js"
+      ],
+      "name": "app/api/mock/autodm/logs/route",
+      "page": "/api/mock/autodm/logs/route",
+      "matchers": [
+        {
+          "regexp": "^/api/mock/autodm/logs(?:/)?$",
+          "originalSource": "/api/mock/autodm/logs"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "development",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "4JwchJo5t8Rt42cfuGHy2d1+GJDmJLR43Hf8V18c0nU=",
+        "__NEXT_PREVIEW_MODE_ID": "4649e6090d8c2876cfdadc3d243f5392",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "e7a82aafd1b734d823f010fa3a5aeb1ec23a42e455d06648eb29b0414cdf7d5d",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "fac30e05a1f996745731075c92a1caf3d85458b5b97d69658bb00d0749c97a1f"
+      }
+    }
+  }
+}

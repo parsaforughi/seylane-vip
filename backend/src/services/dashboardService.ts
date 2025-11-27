@@ -1,5 +1,5 @@
-import prisma from "../utils/prisma.js";
-import { getUserStampCount } from "./stampService.js";
+import prisma from "../utils/prisma";
+import { getUserStampCount } from "./stampService";
 
 export async function getDashboardSummary(userId: number) {
   const [user, activeMissionsCount, pendingMissionLogsCount, stampBalance] =

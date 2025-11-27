@@ -1,4 +1,4 @@
-import { app, shutdown } from "./app.js";
+import { app, shutdown } from "./app";
 
 const PORT = Number(process.env.PORT) || 4000;
 

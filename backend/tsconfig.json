@@ -1,18 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "dist",
+    "module": "commonjs",
+    "target": "es2020",
+    "moduleResolution": "node",
     "rootDir": "src",
+    "outDir": "dist",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts"],
-  "ts-node": {
-    "files": true
-  }
+  "include": ["src"]
 }

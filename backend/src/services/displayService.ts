@@ -1,5 +1,5 @@
-import prisma from "../utils/prisma.js";
-import { createMissionLog } from "./missionLogService.js";
+import prisma from "../utils/prisma";
+import { createMissionLog } from "./missionLogService";
 
 export async function submitDisplay(
   userId: number,

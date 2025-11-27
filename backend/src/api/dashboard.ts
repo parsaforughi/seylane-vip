@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getDashboardSummary } from "../services/dashboardService.js";
+import { getDashboardSummary } from "../services/dashboardService";
 
 const router = Router();
 

@@ -1,0 +1,6 @@
+{
+  "/api/mock/autodm/stats/route": "app/api/mock/autodm/stats/route.js",
+  "/autodm/page": "app/autodm/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/explainer/page": "app/explainer/page.js"
+}

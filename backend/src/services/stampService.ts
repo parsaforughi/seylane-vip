@@ -1,22 +1,25 @@
-import prisma from "../utils/prisma.js";
+import { Prisma, PrismaClient } from "@prisma/client";
+import prisma from "../utils/prisma";
 
 export async function awardStamps(
   userId: number,
-  amount: number,
-  tx: typeof prisma = prisma
+  count: number,
+  tx?: Prisma.TransactionClient | PrismaClient
 ) {
-  await tx.stamp.create({
+  const client = tx ?? prisma;
+
+  await client.stamp.create({
     data: {
       userId,
-      amount,
+      count,
     },
   });
 
-  await tx.user.update({
+  await client.user.update({
     where: { id: userId },
     data: {
-      stamps: { increment: amount },
-      points: { increment: amount },
+      stamps: { increment: count },
+      points: { increment: count },
     },
   });
 }
@@ -24,8 +27,8 @@ export async function awardStamps(
 export async function getUserStampCount(userId: number) {
   const total = await prisma.stamp.aggregate({
     where: { userId },
-    _sum: { amount: true },
+    _sum: { count: true },
   });
 
-  return total._sum.amount ?? 0;
+  return total._sum.count ?? 0;
 }

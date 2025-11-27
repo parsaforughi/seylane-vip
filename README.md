@@ -1,24 +1,39 @@
 # Seylane VIP Monorepo
 
-This monorepo contains the backend API and the VIP Passport mini app.
+Backend API + VIP Passport client + reverse proxy.
 
-- `backend/`: Express + Prisma + ESM server (NodeNext)
-- `passport/`: Vite + React mini app (RTL Persian)
-- `reverse-proxy/`: Nginx config to serve the passport and proxy API
+- `backend/`: Express + Prisma (CommonJS, TypeScript)
+- `passport/`: Vite + React (RTL Persian UI)
+- `reverse-proxy/`: Nginx config for Docker runtime
 
-## Quick start
+## Backend
 
 ```bash
-cd backend
+cd /Users/macbookair/Desktop/seylane-vip/backend
 npm install
-npx prisma generate
+npx prisma migrate dev
+npx prisma db seed
 npm run dev
 ```
 
+The seed creates the demo VIP user (`telegramId = 999999999`) plus dashboard data that the demo-login button consumes.
+
+## Passport
+
 ```bash
-cd passport
+cd /Users/macbookair/Desktop/seylane-vip/passport
 npm install
 npm run dev
 ```
 
-See each package README for details.
+Use the **ورود تست** button to enter the dashboard with the seeded data.
+
+## Docker
+
+```bash
+cd /Users/macbookair/Desktop/seylane-vip
+docker build -t seylane-vip .
+docker compose up
+```
+
+The container exposes port `8081` (Nginx) and proxies `/api` to the backend at `:4000`.

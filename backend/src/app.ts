@@ -1,8 +1,8 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
-import apiRouter from "./api/index.js";
-import prisma from "./utils/prisma.js";
+import apiRouter from "./api/index";
+import prisma from "./utils/prisma";
 
 dotenv.config();
 

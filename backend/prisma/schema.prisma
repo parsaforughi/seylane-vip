@@ -17,11 +17,12 @@ enum MissionLogStatus {
   PENDING
   APPROVED
   REJECTED
+  COMPLETED
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  telegramId    Int?            @unique
+  id            Int            @id @default(autoincrement())
+  telegramId    Int?           @unique
   firstName     String?
   lastName      String?
   username      String?
@@ -30,8 +31,8 @@ model User {
   managerName   String?
   city          String?
   customerCode  String?
-  points        Int             @default(0)
-  stamps        Int             @default(0)
+  points        Int            @default(0)
+  stamps        Int            @default(0)
   vipSince      DateTime?
   missionLogs   MissionLog[]
   displays      Display[]
@@ -39,23 +40,24 @@ model User {
   referrals     Referral[]
   notifications Notification[]
   stampsHistory Stamp[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Mission {
-  id           Int          @id @default(autoincrement())
-  title        String?
-  description  String?
-  rewardStamps Int?
-  rewardPoints Int?
-  isActive     Boolean      @default(true)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  missionLogs  MissionLog[]
-  displays     Display[]
-  purchases    Purchase[]
-  referrals    Referral[]
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  reward      Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  stamps      Stamp[]
+  missionLogs MissionLog[]
+  displays    Display[]
+  purchases   Purchase[]
+  referrals   Referral[]
 }
 
 model MissionLog {
@@ -66,6 +68,7 @@ model MissionLog {
   missionId Int
   payload   String?
   status    MissionLogStatus @default(PENDING)
+  reward    Int              @default(0)
   adminNote String?
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
@@ -114,20 +117,22 @@ model Referral {
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id])
   userId    Int
   title     String
   body      String
-  read      Boolean  @default(false)
+  read      Boolean   @default(false)
   readAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 }
 
 model Stamp {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
-  amount    Int
+  mission   Mission? @relation(fields: [missionId], references: [id])
+  missionId Int?
+  count     Int
   createdAt DateTime @default(now())
 }

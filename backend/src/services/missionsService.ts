@@ -1,4 +1,4 @@
-import prisma from "../utils/prisma.js";
+import prisma from "../utils/prisma";
 
 export async function listActiveMissions() {
   return prisma.mission.findMany({
@@ -9,7 +9,7 @@ export async function listActiveMissions() {
 
 export async function startMission(userId: number, missionId: number) {
   const mission = await prisma.mission.findUnique({ where: { id: missionId } });
-  if (!mission || !mission.isActive) {
+  if (!mission) {
     throw new Error("Invalid mission");
   }
 

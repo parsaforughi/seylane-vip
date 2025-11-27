@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 222 45% 6%;
+  --foreground: 210 40% 96%;
+  --muted: 220 25% 16%;
+  --muted-foreground: 215 20% 70%;
+  --border: 220 25% 18%;
+  --input: 220 25% 18%;
+  --ring: 208 80% 60%;
+  --card: 220 35% 10%;
+  --card-foreground: 0 0% 100%;
+  --accent: 204 100% 62%;
+  --accent-foreground: 222 60% 8%;
+  --primary: 272 100% 69%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 211 88% 58%;
+  --secondary-foreground: 210 40% 98%;
+  --destructive: 0 82% 63%;
+  --destructive-foreground: 0 0% 100%;
+}
+
+* {
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+body {
+  min-height: 100vh;
+  background: #030712;
+  color: hsl(var(--foreground));
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.glass-panel {
+  @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-glass;
+}
+
+.neon-ring {
+  box-shadow: 0 0 45px rgba(59, 130, 246, 0.45);
+}
+
+.animate-spin-slow {
+  animation: spin 12s linear infinite;
+}
+
+.animate-spin-orbit {
+  animation: spin 18s linear infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulseRing 4s ease-in-out infinite;
+}
+
+.animate-orbit {
+  animation: orbit 18s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.4;
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes lensShift {
+  0% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-48%, -52%) scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.4;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(180deg, #38bdf8 0%, #a855f7 100%);
+  border-radius: 999px;
+}

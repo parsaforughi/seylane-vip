@@ -1,13 +1,14 @@
 # Seylane VIP Backend
 
-Express + Prisma (SQLite) + ESM.
+Express + Prisma (SQLite) + CommonJS.
 
 ## Scripts
 
 ```bash
+cd /Users/macbookair/Desktop/seylane-vip/backend
 npm install
-npx prisma generate
-npx prisma migrate dev --name init
+npx prisma migrate dev
+npx prisma db seed
 npm run dev
 ```
 
