@@ -7,8 +7,6 @@ RUN npm install
 
 COPY backend/ ./
 
-COPY backend/.env ./.env
-
 RUN npx prisma generate
 RUN npm run build
 
@@ -31,7 +29,6 @@ WORKDIR /app
 COPY --from=backend-builder /app/backend/dist ./backend/dist
 COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
 COPY --from=backend-builder /app/backend/prisma ./backend/prisma
-COPY --from=backend-builder /app/backend/.env ./backend/.env
 
 # Copy Frontend dist (static files)
 COPY --from=frontend-builder /app/passport/dist /usr/share/nginx/html
