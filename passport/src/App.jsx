@@ -10,6 +10,9 @@ import Purchase from "./pages/Purchase";
 import Display from "./pages/Display";
 import Referral from "./pages/Referral";
 import AdminPanel from "./pages/AdminPanel";
+import ComingSoon from "./pages/ComingSoon";
+
+const SHOW_COMING_SOON = import.meta.env.VITE_COMING_SOON === "true";
 
 function RequireAuth() {
   const { token } = useAuthStore();
@@ -22,6 +25,10 @@ function RequireAuth() {
 
 function App({ telegramInitData = "" }) {
   const { token } = useAuthStore();
+
+  if (SHOW_COMING_SOON) {
+    return <ComingSoon />;
+  }
 
   return (
     <BrowserRouter>

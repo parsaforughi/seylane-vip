@@ -20,6 +20,8 @@ RUN npm install
 
 COPY passport/ ./
 RUN cp public/index.html ./index.html
+# Show "coming soon" page until full version is ready. Set to "false" to restore full app.
+ENV VITE_COMING_SOON=true
 RUN npm run build
 
 # === Runtime ===
