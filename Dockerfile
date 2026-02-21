@@ -7,7 +7,8 @@ RUN npm install
 
 COPY backend/ ./
 
-RUN npx prisma generate
+# Prisma 6 loads prisma.config.ts which requires DATABASE_URL; use placeholder (doesn't connect)
+RUN DATABASE_URL="file:/tmp/dev.db" npx prisma generate
 RUN npm run build
 
 # === Frontend Build ===
