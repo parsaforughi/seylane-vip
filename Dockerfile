@@ -40,7 +40,7 @@ COPY reverse-proxy/nginx.conf /etc/nginx/nginx.conf
 # Install Node for backend runtime
 RUN apk add --no-cache nodejs-current npm
 
-EXPOSE 80
+EXPOSE 8080
 
-# Start backend + nginx
-CMD ["sh", "-c", "node /app/backend/dist/server.js & nginx -g 'daemon off;'"]
+# Backend on 4000; nginx on $PORT (Railway). Substitute PORT into nginx config at startup.
+CMD ["sh", "-c", "sed -i \"s/listen 8080/listen ${PORT:-8080}/\" /etc/nginx/nginx.conf && PORT=4000 node /app/backend/dist/server.js & nginx -g 'daemon off;'"]
