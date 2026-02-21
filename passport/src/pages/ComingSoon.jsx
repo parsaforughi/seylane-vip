@@ -15,9 +15,10 @@ export default function ComingSoon() {
         src="/coming-soon.png"
         alt="همسفر سیلانه سبز - به زودی در کنار شما خواهیم بود"
         style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
+          width: "130%",
+          height: "130%",
+          objectFit: "cover",
+          objectPosition: "center center",
         }}
       />
     </div>
