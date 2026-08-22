@@ -1,18 +1,16 @@
 <p align="center">
-  <img src="docs/og.png" alt="Seylane VIP — Coming soon" width="100%" />
+  <img src="docs/og.png" alt="VIP Passport — Coming soon" width="100%" />
 </p>
 
-<h1 align="center">Seylane VIP</h1>
+<h1 align="center">VIP Passport</h1>
 
 <p align="center">Telegram Mini App · Vite + React · RTL</p>
 
 <p align="center">
-  <em>VIP Passport for Seylaneh Sabz — Telegram Mini App. Loyalty club: stamps, missions, purchase and display proofs, referrals.</em>
+  <em>VIP Passport — Telegram Mini App. Loyalty club: stamps, missions, purchase and display proofs, referrals.</em>
 </p>
 
 <p align="center">
-  <code>seylane</code>
-  <code>seylaneh-sabz</code>
   <code>vip-passport</code>
   <code>telegram-mini-app</code>
   <code>react</code>
@@ -32,7 +30,7 @@
 
 ---
 
-The JS client for Seylaneh Sabz Production & Trade’s loyalty club. Members open it inside Telegram. The shell is a navy glass passport: points, stamps, missions, invoice proofs, shelf displays, VIP referrals.
+The JS client for a loyalty club. Members open it inside Telegram. The shell is a navy glass passport: points, stamps, missions, invoice proofs, shelf displays, VIP referrals.
 
 This repository is the VIP stack. The site itself is `passport/`.
 
@@ -75,7 +73,7 @@ Bottom nav: Dashboard · Missions · Stamps · Profile.
 | `POST` | `/api/purchase` · `/api/display` · `/api/referral` · `/api/upload` |
 | `GET` / `POST` | `/api/admin/…` |
 
-Base URL is `http://localhost:10000/api`, or `https://seylane-vip.onrender.com/api` when the page host contains `onrender.com`.
+Base URL is `http://localhost:10000/api`, or the Render `/api` origin when the page host contains `onrender.com`.
 
 ## Repo
 
@@ -84,7 +82,7 @@ Base URL is `http://localhost:10000/api`, or `https://seylane-vip.onrender.com/a
 | `passport/` | VIP client — this site |
 | `backend/` | Express + Prisma (SQLite). `GET /health` |
 | `reverse-proxy/` | Nginx for the Docker image |
-| `seylane-dashboard/` | Separate Next.js control center (explainer / autodm / iceball). Not the passport UI. |
+| dashboard package | Separate Next.js control center (explainer / autodm / iceball). Not the passport UI. |
 
 ## Run
 
@@ -105,7 +103,7 @@ npm run dev
 The seed creates the demo VIP (`telegramId = 999999999`). Use the demo login button on the login book.
 
 ```bash
-docker build -t seylane-vip .
+docker build .
 docker compose up
 ```
 
