@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/og.png" alt="Seylane VIP Passport — Telegram Mini App for Seylaneh Sabz" width="100%" />
+  <img src="docs/og.png" alt="Seylane VIP — Coming soon" width="100%" />
 </p>
 
 <h1 align="center">Seylane VIP</h1>
