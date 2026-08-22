@@ -9,6 +9,23 @@
 <p align="center">Telegram Mini App · Vite + React · Persian RTL</p>
 
 <p align="center">
+  <em>VIP Passport for Seylaneh Sabz — Persian RTL Telegram Mini App. Loyalty club: stamps, missions, purchase &amp; display proofs, referrals.</em>
+</p>
+
+<p align="center">
+  <code>seylane</code>
+  <code>seylaneh-sabz</code>
+  <code>vip-passport</code>
+  <code>telegram-mini-app</code>
+  <code>react</code>
+  <code>vite</code>
+  <code>javascript</code>
+  <code>loyalty</code>
+  <code>rtl</code>
+  <code>persian</code>
+</p>
+
+<p align="center">
   <a href="#client">Client</a> ·
   <a href="#auth">Auth</a> ·
   <a href="#api-the-client-calls">API</a> ·
