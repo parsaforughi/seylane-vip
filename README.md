@@ -4,12 +4,10 @@
 
 <h1 align="center">Seylane VIP</h1>
 
-<p align="center"><strong>پاسپورت ویژه سیلانه سبز</strong></p>
-
-<p align="center">Telegram Mini App · Vite + React · Persian RTL</p>
+<p align="center">Telegram Mini App · Vite + React · RTL</p>
 
 <p align="center">
-  <em>VIP Passport for Seylaneh Sabz — Persian RTL Telegram Mini App. Loyalty club: stamps, missions, purchase &amp; display proofs, referrals.</em>
+  <em>VIP Passport for Seylaneh Sabz — Telegram Mini App. Loyalty club: stamps, missions, purchase and display proofs, referrals.</em>
 </p>
 
 <p align="center">
@@ -22,7 +20,6 @@
   <code>javascript</code>
   <code>loyalty</code>
   <code>rtl</code>
-  <code>persian</code>
 </p>
 
 <p align="center">
@@ -41,11 +38,11 @@ This repository is the VIP stack. The site itself is `passport/`.
 
 ## Client
 
-`passport/` — Vite 5, React 18, axios, zustand, react-router. RTL Persian. Palette from the live CSS: navy `#020712` / `#050b1f`, neon `#00ffa8`, gold `#e8c97a`.
+`passport/` — Vite 5, React 18, axios, zustand, react-router. RTL UI. Palette from the live CSS: navy `#020712` / `#050b1f`, neon `#00ffa8`, gold `#e8c97a`.
 
 | Route | What it does |
 | --- | --- |
-| `/login` | Telegram `initData` auto-login, or **ورود تست** / **ورود تست VIP** |
+| `/login` | Telegram `initData` auto-login, or demo login / VIP demo login |
 | `/dashboard` | Greeting, city, manager, points, stamps, active / pending counts |
 | `/missions` | Mission cards; `PURCHASE` / `DISPLAY` / `REFERRAL` jump to the form |
 | `/stamps` | Stamp total and the “next reward” ring (every 10) |
@@ -57,7 +54,7 @@ This repository is the VIP stack. The site itself is `passport/`.
 
 `VITE_COMING_SOON=true` replaces the router with the coming-soon still (`ComingSoon`). Anything else redirects to `/dashboard` when a token exists, otherwise `/login`. `CompleteProfile` is in the tree and is not routed.
 
-Bottom nav: داشبورد · ماموریت‌ها · تمبرها · پروفایل.
+Bottom nav: Dashboard · Missions · Stamps · Profile.
 
 ## Auth
 
@@ -105,7 +102,7 @@ npm install
 npm run dev
 ```
 
-The seed creates the demo VIP (`telegramId = 999999999`). Use **ورود تست** on the login book.
+The seed creates the demo VIP (`telegramId = 999999999`). Use the demo login button on the login book.
 
 ```bash
 docker build -t seylane-vip .

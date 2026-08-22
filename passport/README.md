@@ -1,6 +1,6 @@
 # Seylane VIP Passport
 
-Vite + React client for the Seylaneh Sabz loyalty club. Persian RTL Telegram Mini App.
+Vite + React client for the Seylaneh Sabz loyalty club. Telegram Mini App.
 
 See the root [README](../README.md) for the real routes, auth, and API surface.
 
