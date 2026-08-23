@@ -1,12 +1,10 @@
-# Seylane VIP Passport (Vite + React)
+# VIP Passport
 
-Persian RTL mini app for Telegram WebApp.
+Vite + React client for the loyalty club. Telegram Mini App.
 
-## Scripts
+See the root [README](../README.md) for the real routes, auth, and API surface.
 
 ```bash
 npm install
 npm run dev
 ```
-
-Configure `VITE_API_BASE_URL` and `VITE_TELEGRAM_BOT_USERNAME` as needed.
